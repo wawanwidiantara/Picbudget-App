@@ -1,0 +1,16 @@
+{
+    "id": 35,
+    "wallet": 3,
+    "receipt_image": "http://modern-krill-fair.ngrok-free.app/media/receipts/temp_IMG_20240506_120421_oAwaKKt.jpg",
+    "amount": "8900.00",
+    "location": "jl monjali no67 rto4 rw44 kel sinduadi",
+    "formatted_date": "22/05/2024",
+    "items": [
+        {
+            "id": 81,
+            "transaction": 35,
+            "item_name": "green sand 0rgnl",
+            "item_price": "8900.00"
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "user_id": 4,
+    "email": "widi@example.com",
+    "name": "John Doe",
+    "dob": "1990-01-01",
+    "gender": "male",
+    "phone_number": "1234567890"
+}
