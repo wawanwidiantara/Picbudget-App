@@ -23,7 +23,7 @@
 
    ```bash
    git clone https://github.com/WawanWidiantara/picbudget_app.git
-   cd PicBudget-Flutter
+   cd picbudget_app
    ```
 
    
