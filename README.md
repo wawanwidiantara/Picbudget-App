@@ -1,16 +1,37 @@
-# picbudget_app
+# 📸 PicBudget - Flutter Application
 
-A new Flutter project.
+**PicBudget** is a Flutter application designed to simplify personal finance management by leveraging AI to extract key information from receipts. This app processes receipt images to capture essential details like merchant name, date, and total amount, and organizes this data for seamless budget management and expense tracking.
 
-## Getting Started
+## 📋 Features
 
-This project is a starting point for a Flutter application.
+- **AI-driven Data Extraction**: Utilizes an AI model to automatically read and extract information from receipt images, including merchant name, date, and total amount.
+- **Expense Tracking**: Helps users track their expenses by storing receipt data and categorizing expenditures.
+- **Spending Analysis**: Offers visual insights into spending habits, empowering users to make informed financial decisions.
+- **Multi-Wallet Support**: Users can create and manage multiple wallets (e.g., personal, business, or shared) to track and categorize spending across different categories.
+- **Secure Login Integration (Google & Apple)**: Provides a secure and convenient login experience with options to authenticate using Google and Apple accounts.
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Prerequisites
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter**: Version 3.0+ recommended
+- **Dart**: Version 2.17+
+- **Android Studio** or **Xcode** (for Android and iOS development)
+- **AI Backend Server**: Ensure the Django backend is running (follow the backend setup instructions in the corresponding repository).
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Getting Started
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/WawanWidiantara/picbudget_app.git
+   cd picbudget_app
+   ```
+
+   
+2. **Install dependencies**:
+
+   ```bash
+   flutter pub get
+   ```
+
+## Version Information
+Version 1 of PicBudget's application is available at [GitHub Repository: PicBudget v1](https://github.com/WawanWidiantara/PicBudget-Backend/tree/picbudget-be-v1). The newer version will be using BloC.
