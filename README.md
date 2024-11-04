@@ -22,7 +22,7 @@
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/PicBudget-Flutter.git
+   git clone https://github.com/WawanWidiantara/picbudget_app.git
    cd PicBudget-Flutter
    ```
 
