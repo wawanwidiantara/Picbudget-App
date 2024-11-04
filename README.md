@@ -2,6 +2,10 @@
 
 **PicBudget** is a Flutter application designed to simplify personal finance management by leveraging AI to extract key information from receipts. This app processes receipt images to capture essential details like merchant name, date, and total amount, and organizes this data for seamless budget management and expense tracking.
 
+## Version Information
+Version 1 of PicBudget's application is available at [GitHub Repository: PicBudget v1](https://github.com/WawanWidiantara/PicBudget-Backend/tree/picbudget-be-v1). The newer version will be using BloC.
+> **Note:** This project is currently undergoing a migration to a Clean Architecture framework, aiming to enhance modularity, scalability, and maintainability.
+
 ## 📋 Features
 
 - **AI-driven Data Extraction**: Utilizes an AI model to automatically read and extract information from receipt images, including merchant name, date, and total amount.
@@ -32,6 +36,3 @@
    ```bash
    flutter pub get
    ```
-
-## Version Information
-Version 1 of PicBudget's application is available at [GitHub Repository: PicBudget v1](https://github.com/WawanWidiantara/PicBudget-Backend/tree/picbudget-be-v1). The newer version will be using BloC.
