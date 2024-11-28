@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTypography {
-  static const displayLarge = TextStyle(
+  static TextStyle displayLarge = GoogleFonts.plusJakartaSans(
     fontSize: 57,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -10,7 +11,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const displayMedium = TextStyle(
+  static TextStyle displayMedium = GoogleFonts.plusJakartaSans(
     fontSize: 45,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -19,7 +20,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const displaySmall = TextStyle(
+  static TextStyle displaySmall = GoogleFonts.plusJakartaSans(
     fontSize: 36,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -28,7 +29,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const headlineLarge = TextStyle(
+  static TextStyle headlineLarge = GoogleFonts.plusJakartaSans(
     fontSize: 32,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -37,7 +38,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const headlineMedium = TextStyle(
+  static TextStyle headlineMedium = GoogleFonts.plusJakartaSans(
     fontSize: 28,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -46,7 +47,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const headlineSmall = TextStyle(
+  static TextStyle headlineSmall = GoogleFonts.plusJakartaSans(
     fontSize: 24,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -55,7 +56,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const titleLarge = TextStyle(
+  static TextStyle titleLarge = GoogleFonts.plusJakartaSans(
     fontSize: 22,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -64,7 +65,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const titleMedium = TextStyle(
+  static TextStyle titleMedium = GoogleFonts.plusJakartaSans(
     fontSize: 16,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -73,7 +74,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const titleSmall = TextStyle(
+  static TextStyle titleSmall = GoogleFonts.plusJakartaSans(
     fontSize: 14,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -82,7 +83,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const bodyLarge = TextStyle(
+  static TextStyle bodyLarge = GoogleFonts.plusJakartaSans(
     fontSize: 16,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -91,7 +92,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const bodyMedium = TextStyle(
+  static TextStyle bodyMedium = GoogleFonts.plusJakartaSans(
     fontSize: 14,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -100,7 +101,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const bodySmall = TextStyle(
+  static TextStyle bodySmall = GoogleFonts.plusJakartaSans(
     fontSize: 12,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -109,7 +110,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const labelLarge = TextStyle(
+  static TextStyle labelLarge = GoogleFonts.plusJakartaSans(
     fontSize: 14,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -118,7 +119,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const labelMedium = TextStyle(
+  static TextStyle labelMedium = GoogleFonts.plusJakartaSans(
     fontSize: 12,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
@@ -127,7 +128,7 @@ abstract class AppTypography {
     letterSpacing: 0,
   );
 
-  static const labelSmall = TextStyle(
+  static TextStyle labelSmall = GoogleFonts.plusJakartaSans(
     fontSize: 10,
     decoration: TextDecoration.none,
     fontStyle: FontStyle.normal,
