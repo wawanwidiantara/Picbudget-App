@@ -7,8 +7,9 @@ class TransactionProvider extends GetConnect {
   void onInit() {
     httpClient.defaultDecoder = (map) {
       if (map is Map<String, dynamic>) return Transaction.fromJson(map);
-      if (map is List)
+      if (map is List) {
         return map.map((item) => Transaction.fromJson(item)).toList();
+      }
     };
     httpClient.baseUrl = 'YOUR-API-URL';
   }
