@@ -8,26 +8,26 @@ abstract class AppColors {
   static Color secondary = const Color(0xff221f20);
 
   // Brand Colors
-  static Color brandColor = _BrandColors() as Color;
+  static const brandColor = _BrandColors();
 
   // Brand Colors
-  static Color accentColor = _AccentColors() as Color;
+  static const accentColor = _AccentColors();
 
   // Neutral Colors
-  static Color neutral = _NeutralColors() as Color;
+  static const neutral = _NeutralColors();
 
   // Error Colors
-  static Color error = _ErrorColors() as Color;
+  static const error = _ErrorColors();
 
   // Warning Colors
-  static Color warning = _WarningColors() as Color;
+  static const warning = _WarningColors();
 
   // Success Colors
-  static Color success = _SuccessColors() as Color;
+  static const success = _SuccessColors();
 }
 
 class _BrandColors {
-  _BrandColors();
+  const _BrandColors();
 
   final brandColor25 = const Color(0xfff7edc9);
   final brandColor50 = const Color(0xfff5e9bc);
@@ -45,7 +45,7 @@ class _BrandColors {
 }
 
 class _AccentColors {
-  _AccentColors();
+  const _AccentColors();
 
   final accentColor25 = const Color(0xffa7a5a6);
   final accentColor50 = const Color(0xff918f90);
@@ -63,7 +63,7 @@ class _AccentColors {
 }
 
 class _NeutralColors {
-  _NeutralColors();
+  const _NeutralColors();
 
   final neutralColor25 = const Color(0xfff8f8f8);
   final neutralColor50 = const Color(0xfff7f7f7);
@@ -81,7 +81,7 @@ class _NeutralColors {
 }
 
 class _ErrorColors {
-  _ErrorColors();
+  const _ErrorColors();
 
   final errorColor25 = const Color(0xffebacb1);
   final errorColor50 = const Color(0xffe6989e);
@@ -99,7 +99,7 @@ class _ErrorColors {
 }
 
 class _WarningColors {
-  _WarningColors();
+  const _WarningColors();
 
   final warningColor25 = const Color(0xfff8e5b9);
   final warningColor50 = const Color(0xfff6dfa7);
@@ -117,7 +117,7 @@ class _WarningColors {
 }
 
 class _SuccessColors {
-  _SuccessColors();
+  const _SuccessColors();
 
   final successColor25 = const Color(0xffb1cdb7);
   final successColor50 = const Color(0xff9dc0a5);
