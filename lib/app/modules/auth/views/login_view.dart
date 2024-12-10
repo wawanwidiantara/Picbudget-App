@@ -59,6 +59,7 @@ class LoginView extends GetView<LoginController> {
                     hintText: 'Enter your email',
                     isObsecured: false,
                     keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {},
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
@@ -72,6 +73,7 @@ class LoginView extends GetView<LoginController> {
                     hintText: 'Enter your password',
                     isObsecured: true,
                     keyboardType: TextInputType.text,
+                    onChanged: (value) {},
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
@@ -92,9 +94,9 @@ class LoginView extends GetView<LoginController> {
                 SizedBox(height: 24),
                 Button(
                     onPressed: () {
-                      Get.offAll(LoginView());
+                      // controller.login();
                     },
-                    label: 'Get started now'),
+                    label: 'Log in'),
                 SizedBox(height: 24),
                 Center(
                   child: Text.rich(
@@ -107,7 +109,7 @@ class LoginView extends GetView<LoginController> {
                           baseline: TextBaseline.alphabetic,
                           child: GestureDetector(
                             onTap: () {
-                              Get.to(() => const RegisterView());
+                              Get.offAll(RegisterView());
                             },
                             child: Text(
                               'Sign up',

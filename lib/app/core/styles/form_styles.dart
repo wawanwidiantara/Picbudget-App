@@ -31,3 +31,22 @@ InputDecoration formStyle(String hintText) {
     ),
   );
 }
+
+InputDecoration otpFormStyle() {
+  return InputDecoration(
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.primary, width: 2.0),
+      ),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+      ),
+      errorBorder: UnderlineInputBorder(
+        borderSide:
+            BorderSide(color: AppColors.error.errorColor500, width: 1.5),
+      ),
+      focusedErrorBorder: UnderlineInputBorder(
+        borderSide:
+            BorderSide(color: AppColors.error.errorColor500, width: 2.0),
+      ),
+      counterText: '');
+}
