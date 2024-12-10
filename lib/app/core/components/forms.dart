@@ -10,6 +10,7 @@ class FormWidget extends StatelessWidget {
     required this.validator,
     required this.isObsecured,
     required this.keyboardType,
+    required this.hintText,
   });
 
   final TextEditingController controller;
@@ -17,6 +18,7 @@ class FormWidget extends StatelessWidget {
   final String? Function(String?) validator;
   final bool isObsecured;
   final TextInputType keyboardType;
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class FormWidget extends StatelessWidget {
             obscureText: isObsecured,
             keyboardType: keyboardType,
             style: AppTypography.bodyMedium,
-            decoration: formStyle(),
+            decoration: formStyle(hintText),
           ),
         ),
       ],

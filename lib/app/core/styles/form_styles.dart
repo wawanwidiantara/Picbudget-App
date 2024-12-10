@@ -1,9 +1,13 @@
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:picbudget_app/app/core/constants/text_styles.dart';
 
-InputDecoration formStyle() {
+InputDecoration formStyle(String hintText) {
   return InputDecoration(
     contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+    hintText: hintText,
+    hintStyle: AppTypography.bodyMedium
+        .copyWith(color: AppColors.neutral.neutralColor700),
     filled: true,
     fillColor: AppColors.white,
     focusColor: AppColors.neutral.neutralColor500,

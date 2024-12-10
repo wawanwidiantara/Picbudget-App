@@ -51,9 +51,9 @@ class Button extends StatelessWidget {
       default:
         backgroundColor = state == ButtonState.enabled
             ? AppColors.primary
-            : AppColors.brandColor.brandColor200;
+            : AppColors.primary;
         textStyle = AppTypography.bodyMedium.copyWith(
-          color: Colors.white,
+          color: AppColors.secondary,
           fontWeight: FontWeight.bold,
         );
         buttonStyle = ElevatedButton.styleFrom(
