@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:picbudget_app/core/constants/colors.dart';
-import 'package:picbudget_app/core/constants/text_styles.dart';
+import 'package:picbudget_app/app/core/constants/colors.dart';
+import 'package:picbudget_app/app/core/constants/text_styles.dart';
 
 enum ButtonType { primary, secondary, tertiary }
 
