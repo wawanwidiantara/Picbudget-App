@@ -51,16 +51,20 @@ class OTPForm extends StatelessWidget {
   const OTPForm({
     super.key,
     required this.controller,
+    required this.onChanged,
+    required this.validator,
   });
 
-  final OtpController controller;
+  final TextEditingController controller;
+  final void Function(String) onChanged;
+  final String? Function(String?) validator;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 200,
       child: TextFormField(
-        controller: controller.otpController,
+        controller: controller,
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         maxLength: 6,
@@ -74,20 +78,8 @@ class OTPForm extends StatelessWidget {
         onTapOutside: (value) {
           FocusScope.of(context).unfocus();
         },
-        onChanged: (value) {
-          if (value.length == 6) {
-            // Automatically submit when 6 characters are entered
-            FocusScope.of(context).unfocus(); // Close the keyboard
-            controller
-                .verifyOtp(); // Call the controller's OTP submission method
-          }
-        },
-        validator: (value) {
-          if (value!.isEmpty) {
-            return 'Please enter OTP';
-          }
-          return null;
-        },
+        onChanged: onChanged,
+        validator: validator,
       ),
     );
   }

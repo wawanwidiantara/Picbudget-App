@@ -38,13 +38,30 @@ class Button extends StatelessWidget {
       case ButtonType.tertiary:
         backgroundColor = AppColors.white;
         textStyle = AppTypography.bodyMedium.copyWith(
-          color: AppColors.primary,
+          color: AppColors.secondary,
+          fontWeight: FontWeight.bold,
+        );
+        buttonStyle = ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          shape: RoundedRectangleBorder(
+            side:
+                BorderSide(color: AppColors.neutral.neutralColor500, width: 2),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          elevation: 0, // Remove shadow
+        );
+        break;
+      case ButtonType.secondary:
+        backgroundColor = state == ButtonState.enabled
+            ? AppColors.secondary
+            : AppColors.secondary;
+        textStyle = AppTypography.bodyMedium.copyWith(
+          color: AppColors.white,
           fontWeight: FontWeight.bold,
         );
         buttonStyle = ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          elevation: 0, // Remove shadow
         );
         break;
       case ButtonType.primary:

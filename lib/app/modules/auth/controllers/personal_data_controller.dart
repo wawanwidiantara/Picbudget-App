@@ -1,9 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:picbudget_app/app/modules/auth/views/personal_data_success_view.dart';
 
 class PersonalDataController extends GetxController {
-  //TODO: Implement PersonalDataController
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController fullnameController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
-  final count = 0.obs;
+  final isAgree = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -19,5 +25,9 @@ class PersonalDataController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  Future<void> saveProfile() async {
+    if (formKey.currentState!.validate() && isAgree.value) {
+      Get.offAll(() => PersonalDataSuccessView());
+    }
+  }
 }

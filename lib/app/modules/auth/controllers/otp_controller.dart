@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:picbudget_app/app/routes/app_pages.dart';
+import 'package:picbudget_app/app/modules/auth/views/register_success_view.dart';
 
 class OtpController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -46,7 +46,7 @@ class OtpController extends GetxController {
 
   Future<void> verifyOtp() async {
     if (formKey.currentState!.validate()) {
-      Get.offAllNamed(Routes.ON_BOARDING);
+      Get.offAll(RegisterSuccessView());
     }
   }
 }

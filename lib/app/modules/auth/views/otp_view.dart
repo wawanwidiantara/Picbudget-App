@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:picbudget_app/app/core/components/forms.dart';
@@ -46,7 +45,23 @@ class OtpView extends GetView<OtpController> {
                   style: AppTypography.bodyMedium.copyWith(height: 1.2),
                 ),
                 SizedBox(height: 24),
-                OTPForm(controller: controller),
+                OTPForm(
+                  controller: controller.otpController,
+                  onChanged: (value) {
+                    if (value.length == 6) {
+                      // Automatically submit when 6 characters are entered
+                      FocusScope.of(context).unfocus(); // Close the keyboard
+                      controller
+                          .verifyOtp(); // Call the controller's OTP submission method
+                    }
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter the OTP';
+                    }
+                    return null;
+                  },
+                ),
                 SizedBox(height: 24),
                 Obx(() {
                   if (controller.countdown.value > 0) {
