@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class PicocrController extends GetxController {
-  //TODO: Implement PicocrController
+class PicScanController extends GetxController {
+  var nerResult = Get.arguments;
 
   final count = 0.obs;
   @override

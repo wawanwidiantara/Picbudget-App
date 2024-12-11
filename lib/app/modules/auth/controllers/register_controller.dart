@@ -27,15 +27,15 @@ class RegisterController extends GetxController {
     double strength = estimatePasswordStrength(password);
 
     if (password.isEmpty) {
-      passwordStrength.value = 0; // No bar
+      passwordStrength.value = 0;
     } else if (strength <= 0.25) {
-      passwordStrength.value = 1; // Weak
+      passwordStrength.value = 1;
     } else if (strength > 0.25 && strength <= 0.5) {
-      passwordStrength.value = 2; // Moderate
+      passwordStrength.value = 2;
     } else if (strength > 0.5 && strength <= 0.75) {
-      passwordStrength.value = 3; // Strong
+      passwordStrength.value = 3;
     } else if (strength > 0.75) {
-      passwordStrength.value = 4; // Very Strong
+      passwordStrength.value = 4;
     }
   }
 
@@ -55,7 +55,6 @@ class RegisterController extends GetxController {
       }
 
       try {
-        // Send POST request to register API
         final response = await http.post(
           Uri.parse('${UrlApi.baseAPI}/api/auth/register/'),
           headers: {
@@ -70,21 +69,17 @@ class RegisterController extends GetxController {
         if (response.statusCode == 200 || response.statusCode == 201) {
           final data = jsonDecode(response.body);
 
-          // Show success snackbar
           SnackBarWidget.showSnackBar(
             'Success',
-            data[
-                'message'], // "User registered successfully. OTP sent to email."
+            data['message'],
             'success',
           );
 
-          // Navigate to OTP View, passing email and password
           Get.to(() => OtpView(), arguments: {
             'email': email,
             'password': password,
           });
         } else {
-          // Show error snackbar
           final errorData = jsonDecode(response.body);
           SnackBarWidget.showSnackBar(
             'Registration Failed',
@@ -93,7 +88,6 @@ class RegisterController extends GetxController {
           );
         }
       } catch (e) {
-        // Handle network or other errors
         SnackBarWidget.showSnackBar(
           'Error',
           'Something went wrong. Please try again later.',

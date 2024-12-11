@@ -1,0 +1,14 @@
+{
+        "id": "bcfa9e35-e95e-4f6a-b7b7-3cd471bfbe48",
+        "type": "expense",
+        "amount": "24000.00",
+        "transaction_date": "2024-12-12T04:36:16.156049+07:00",
+        "location": null,
+        "receipt": "http://127.0.0.1:8000/media/receipts/picscan/5c9ee736-9890-42b2-91ec-bd37a6eb7d96.jpg",
+        "method": "picscan",
+        "status": "unconfirmed",
+        "created_at": "2024-12-12T04:36:16.160710+07:00",
+        "updated_at": "2024-12-12T04:36:16.160725+07:00",
+        "wallet": "12c047ed-1bdd-4ecd-9f18-138459359c9c",
+        "labels": ["bcfa9e35-e95e-4f6a-b7b7-3cd471bfbe48", "bcfa9e35-e95e-4f6a-b7b7-3cd471bfbe48"]
+}

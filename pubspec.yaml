@@ -9,6 +9,7 @@ environment:
   sdk: ^3.5.0
 
 dependencies:
+  action_slider: ^0.7.0
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
   equatable: ^2.0.5
@@ -25,8 +26,10 @@ dependencies:
   http: ^1.2.2
   image_picker: ^1.1.2
   intl: ^0.20.0
+  lottie: ^3.2.0
   password_strength: ^0.2.0
   path: ^1.9.0
+  photo_view: ^0.15.0
   string_extensions: ^0.7.3
   transitioned_indexed_stack: ^1.0.2
 
@@ -60,6 +63,8 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/backgrounds/
+    - assets/models/
+    - assets/lotties/
 
 flutter_gen:
   output: lib/core/assets/

@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/PicScan/bindings/pic_scan_binding.dart';
+import '../modules/PicScan/views/pic_scan_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/auth_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -8,8 +10,6 @@ import '../modules/navbar/bindings/navbar_binding.dart';
 import '../modules/navbar/views/navbar_view.dart';
 import '../modules/on_boarding/bindings/on_boarding_binding.dart';
 import '../modules/on_boarding/views/on_boarding_view.dart';
-import '../modules/picocr/bindings/picocr_binding.dart';
-import '../modules/picocr/views/picocr_view.dart';
 import '../modules/picplan/bindings/picplan_binding.dart';
 import '../modules/picplan/views/picplan_view.dart';
 import '../modules/picreport/bindings/picreport_binding.dart';
@@ -79,11 +79,6 @@ class AppPages {
       binding: PicplanBinding(),
     ),
     GetPage(
-      name: _Paths.PICOCR,
-      page: () => const PicocrView(),
-      binding: PicocrBinding(),
-    ),
-    GetPage(
       name: _Paths.PICVOICE,
       page: () => const PicvoiceView(),
       binding: PicvoiceBinding(),
@@ -92,6 +87,11 @@ class AppPages {
       name: _Paths.PICREPORT,
       page: () => const PicreportView(),
       binding: PicreportBinding(),
+    ),
+    GetPage(
+      name: _Paths.PIC_SCAN,
+      page: () => const PicScanView(),
+      binding: PicScanBinding(),
     ),
   ];
 }

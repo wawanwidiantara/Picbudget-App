@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:picbudget_app/app/core/components/snackbar.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
+import 'package:picbudget_app/app/modules/PicScan/controllers/extract_receipt_controller.dart';
 import 'package:picbudget_app/app/modules/home/views/home_view.dart';
 import 'package:picbudget_app/app/modules/profile/views/profile_view.dart';
+import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 
 import '../controllers/navbar_controller.dart';
@@ -12,6 +16,9 @@ class NavbarView extends GetView<NavbarController> {
   const NavbarView({super.key});
   @override
   Widget build(BuildContext context) {
+    final extract = Get.put(ExtractReceiptController());
+    final wallet = Get.put(WalletController());
+
     return GetBuilder<NavbarController>(builder: (controller) {
       return Scaffold(
         body: FadeIndexedStack(
@@ -65,12 +72,28 @@ class NavbarView extends GetView<NavbarController> {
               left: MediaQuery.of(context).size.width / 2 - 30, // Center button
               child: GestureDetector(
                 onTap: () {
-                  // Define the button's action
-                  print("Custom Button Pressed");
+                  final walletId = wallet.getFirstWalletId();
+                  if (walletId != null) {
+                    extract.getReceiptImage(ImageSource.camera, walletId);
+                  } else {
+                    SnackBarWidget.showSnackBar(
+                      'Transaksi Gagal',
+                      'Error: No wallet found.',
+                      'err',
+                    );
+                  }
                 },
                 onLongPress: () {
-                  // Define the button's long press action
-                  print("Custom Button Long Pressed");
+                  final walletId = wallet.getFirstWalletId();
+                  if (walletId != null) {
+                    extract.getReceiptImage(ImageSource.gallery, walletId);
+                  } else {
+                    SnackBarWidget.showSnackBar(
+                      'Transaksi Gagal',
+                      'Error: No wallet found.',
+                      'err',
+                    );
+                  }
                 },
                 child: Container(
                   width: 60,

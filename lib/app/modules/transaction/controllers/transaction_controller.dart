@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 
 class TransactionController extends GetxController {
-  //TODO: Implement TransactionController
+  var selectedImage = ''.obs;
+  File? receiptImage;
+  var receipt = ''.obs;
+  var nerResult = {}.obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +22,4 @@ class TransactionController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

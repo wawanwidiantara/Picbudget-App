@@ -15,6 +15,7 @@ abstract class Routes {
   static const PICOCR = _Paths.PICOCR;
   static const PICVOICE = _Paths.PICVOICE;
   static const PICREPORT = _Paths.PICREPORT;
+  static const PIC_SCAN = _Paths.PIC_SCAN;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const PICOCR = '/picocr';
   static const PICVOICE = '/picvoice';
   static const PICREPORT = '/picreport';
+  static const PIC_SCAN = '/pic-scan';
 }
