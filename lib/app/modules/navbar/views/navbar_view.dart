@@ -68,6 +68,10 @@ class NavbarView extends GetView<NavbarController> {
                   // Define the button's action
                   print("Custom Button Pressed");
                 },
+                onLongPress: () {
+                  // Define the button's long press action
+                  print("Custom Button Long Pressed");
+                },
                 child: Container(
                   width: 60,
                   height: 60,

@@ -9,6 +9,12 @@ abstract class Routes {
   static const SPLASH = _Paths.SPLASH;
   static const NAVBAR = _Paths.NAVBAR;
   static const PROFILE = _Paths.PROFILE;
+  static const WALLET = _Paths.WALLET;
+  static const TRANSACTION = _Paths.TRANSACTION;
+  static const PICPLAN = _Paths.PICPLAN;
+  static const PICOCR = _Paths.PICOCR;
+  static const PICVOICE = _Paths.PICVOICE;
+  static const PICREPORT = _Paths.PICREPORT;
 }
 
 abstract class _Paths {
@@ -19,4 +25,10 @@ abstract class _Paths {
   static const SPLASH = '/splash';
   static const NAVBAR = '/navbar';
   static const PROFILE = '/profile';
+  static const WALLET = '/wallet';
+  static const TRANSACTION = '/transaction';
+  static const PICPLAN = '/picplan';
+  static const PICOCR = '/picocr';
+  static const PICVOICE = '/picvoice';
+  static const PICREPORT = '/picreport';
 }

@@ -6,6 +6,7 @@ import 'package:picbudget_app/app/core/components/forms.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
 import 'package:picbudget_app/app/modules/auth/controllers/login_controller.dart';
+import 'package:picbudget_app/app/modules/auth/views/forgot_password_view.dart';
 import 'package:picbudget_app/app/modules/auth/views/register_view.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -83,11 +84,16 @@ class LoginView extends GetView<LoginController> {
                 SizedBox(height: 24),
                 Container(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    'Forgot your password?',
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.offAll(ForgotPasswordView());
+                    },
+                    child: Text(
+                      'Forgot your password?',
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

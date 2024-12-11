@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
 import 'package:picbudget_app/app/core/styles/form_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:picbudget_app/app/modules/auth/controllers/otp_controller.dart';
 
 class FormWidget extends StatelessWidget {
   const FormWidget({

@@ -58,11 +58,13 @@ class HomeView extends GetView<HomeController> {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      'Rp. 1.000.000.000',
+                      'Rp. 1000000',
                       style: AppTypography.headlineLarge.copyWith(
                         color: AppColors.secondary,
                         fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 24),
                     Text.rich(
@@ -264,7 +266,7 @@ class SpendingOverview extends StatelessWidget {
                 Column(
                   children: spendingData.map((data) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 6.0),
                       child: Row(
                         children: [
                           CircleAvatar(
@@ -272,17 +274,25 @@ class SpendingOverview extends StatelessWidget {
                             backgroundColor: _hexToColor(data['color']),
                           ),
                           SizedBox(width: 8),
+                          // Expanded(
+                          //   child: Text(
+                          //     data['category'],
+                          //     style: AppTypography.labelMedium.copyWith(
+                          //       color: AppColors.secondary,
+                          //     ),
+                          //   ),
+                          // ),
                           Expanded(
                             child: Text(
-                              data['category'],
-                              style: AppTypography.bodyMedium.copyWith(
-                                color: AppColors.secondary,
+                              "${data['category']}",
+                              style: AppTypography.labelMedium.copyWith(
+                                color: AppColors.neutral.neutralColor900,
                               ),
                             ),
                           ),
                           Text(
                             "Rp. ${data['amount']}",
-                            style: AppTypography.bodyMedium.copyWith(
+                            style: AppTypography.labelMedium.copyWith(
                               color: AppColors.secondary,
                               fontWeight: FontWeight.bold,
                             ),

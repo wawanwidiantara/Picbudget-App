@@ -1,65 +1,62 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:picbudget_app/app/core/components/snackbar.dart';
 import 'package:picbudget_app/app/core/constants/url.dart';
-import 'package:picbudget_app/app/routes/app_pages.dart';
+import 'package:picbudget_app/app/modules/auth/views/login_view.dart';
+import 'package:http/http.dart' as http;
 
-class LoginController extends GetxController {
+class ForgotPasswordController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final getStorage = GetStorage();
+
+  final count = 0.obs;
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
 
   @override
   void onClose() {
     super.onClose();
-    emailController.dispose();
-    passwordController.dispose();
   }
 
-  Future<void> login() async {
+  Future<void> requestResetLink() async {
     if (formKey.currentState!.validate()) {
       final String email = emailController.text.trim();
-      final String password = passwordController.text.trim();
 
       try {
         // Make the POST request
         final response = await http.post(
-          Uri.parse('${UrlApi.baseAPI}/api/auth/login/'), // Use UrlApi.baseAPI
+          Uri.parse(
+              '${UrlApi.baseAPI}/api/auth/password-reset/'), // Use UrlApi.baseAPI
           headers: {
             'Content-Type': 'application/json',
           },
-          body: jsonEncode({
-            'email': email,
-            'password': password,
-          }),
+          body: jsonEncode({'email': email}),
         );
 
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
-
-          // Save tokens and user data in GetStorage
-          getStorage.write('refresh', data['refresh']);
-          getStorage.write('access', data['access']);
-          getStorage.write('user', data['data']);
-
+        if (response.statusCode <= 200) {
           // Show success snackbar
           SnackBarWidget.showSnackBar(
-            'Login Success',
-            'Welcome back!',
+            'Code Sent',
+            'Please check your email for the reset code',
             'success',
           );
 
           // Navigate to the home page
-          Get.offAllNamed(Routes.NAVBAR);
+          Get.offAll(() => LoginView());
         } else {
           // Handle error
           SnackBarWidget.showSnackBar(
-            'Login Failed',
-            'Invalid email or password',
+            'Error',
+            'Something went wrong. Please try again later.',
             'err',
           );
         }
@@ -74,4 +71,3 @@ class LoginController extends GetxController {
     }
   }
 }
-
