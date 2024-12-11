@@ -94,7 +94,7 @@ class LoginView extends GetView<LoginController> {
                 SizedBox(height: 24),
                 Button(
                     onPressed: () {
-                      // controller.login();
+                      controller.login();
                     },
                     label: 'Log in'),
                 SizedBox(height: 24),

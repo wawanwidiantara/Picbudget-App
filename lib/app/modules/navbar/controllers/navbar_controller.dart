@@ -1,23 +1,33 @@
 import 'package:get/get.dart';
 
 class NavbarController extends GetxController {
-  //TODO: Implement NavbarController
+  var tabIndex = 0;
+  var idTab = Get.arguments;
 
-  final count = 0.obs;
+  void changeTabIndex(int index) {
+    tabIndex = index;
+    update();
+  }
+
   @override
   void onInit() {
     super.onInit();
+    update();
   }
 
   @override
   void onReady() {
+    if (idTab == null) {
+      changeTabIndex(tabIndex);
+    } else {
+      changeTabIndex(idTab);
+    }
     super.onReady();
+    update();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
+  // @override
+  // void onClose() {
+  //   super.onClose();
+  // }
 }
