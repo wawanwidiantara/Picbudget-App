@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
+import 'package:picbudget_app/app/data/models/wallet.dart';
+import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
+import 'package:picbudget_app/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -11,6 +14,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
+    final wallet = Get.find<WalletController>();
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SingleChildScrollView(
@@ -57,15 +61,19 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                     SizedBox(height: 12),
-                    Text(
-                      'Rp. 1000000',
-                      style: AppTypography.headlineLarge.copyWith(
-                        color: AppColors.secondary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    // Wallet Balance using Obx
+
+                    Obx(() {
+                      return Text(
+                        'Rp. ${wallet.totalBalance.value}',
+                        style: AppTypography.headlineLarge.copyWith(
+                          color: AppColors.secondary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      );
+                    }),
                     SizedBox(height: 24),
                     Text.rich(
                       TextSpan(
@@ -102,6 +110,7 @@ class HomeView extends GetView<HomeController> {
                     icon: Icons.account_balance_wallet,
                     label: 'Wallet',
                     onTap: () {
+                      Get.toNamed(Routes.WALLET);
                       // Add Transaction Action
                     },
                   ),

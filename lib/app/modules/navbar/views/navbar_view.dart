@@ -7,7 +7,9 @@ import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/modules/PicScan/controllers/extract_receipt_controller.dart';
 import 'package:picbudget_app/app/modules/home/views/home_view.dart';
 import 'package:picbudget_app/app/modules/profile/views/profile_view.dart';
+import 'package:picbudget_app/app/modules/transaction/views/transaction_view.dart';
 import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
+import 'package:picbudget_app/app/routes/app_pages.dart';
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 
 import '../controllers/navbar_controller.dart';
@@ -94,6 +96,9 @@ class NavbarView extends GetView<NavbarController> {
                       'err',
                     );
                   }
+                },
+                onDoubleTap: () {
+                  Get.to(TransactionView());
                 },
                 child: Container(
                   width: 60,
