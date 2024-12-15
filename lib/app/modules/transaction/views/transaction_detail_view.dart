@@ -2,8 +2,10 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
+import 'package:picbudget_app/app/data/models/label.dart';
 import 'package:picbudget_app/app/modules/transaction/controllers/transaction_detail_controller.dart';
 
 class TransactionDetailView extends GetView<TransactionDetailController> {
@@ -65,6 +67,55 @@ class TransactionDetailView extends GetView<TransactionDetailController> {
                         Text(
                             'Date: ${transaction.getFormattedTransactionDate()}',
                             style: TextStyle(fontSize: 16)),
+                        SizedBox(height: 16),
+                        Text('Labels:', style: TextStyle(fontSize: 16)),
+                        Chip(label: Text('🥤Labels')),
+                        SizedBox(height: 16),
+                        Text('Labels:', style: TextStyle(fontSize: 16)),
+                        SizedBox(height: 8),
+                        MultiDropdown<Label>(
+                          items: controller.availableLabels.map((label) {
+                            return DropdownItem(
+                              label: label.name,
+                              value: label,
+                            );
+                          }).toList(),
+                          controller: controller.dropdownController,
+                          enabled: true,
+                          searchEnabled: false,
+                          chipDecoration: ChipDecoration(
+                            backgroundColor: AppColors.primary,
+                            wrap: true,
+                            runSpacing: 4,
+                            spacing: 8,
+                          ),
+                          fieldDecoration: FieldDecoration(
+                            hintText: 'Select Labels',
+                            hintStyle: TextStyle(color: AppColors.black),
+                            prefixIcon: const Icon(Icons.label),
+                            showClearIcon: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                  color: AppColors.neutral.neutralColor600),
+                            ),
+                          ),
+                          dropdownDecoration: const DropdownDecoration(
+                            marginTop: 2,
+                            maxHeight: 300,
+                          ),
+                          dropdownItemDecoration: DropdownItemDecoration(
+                            selectedIcon:
+                                const Icon(Icons.check, color: Colors.blue),
+                            disabledIcon:
+                                Icon(Icons.lock, color: Colors.grey.shade300),
+                          ),
+                          onSelectionChange: (selectedItems) {
+                            controller.updateSelectedLabels(
+                              selectedItems.map((item) => item).toList(),
+                            );
+                          },
+                        ),
                         if (transactionItems.isNotEmpty) ...[
                           SizedBox(height: 16),
                           Text('Items:', style: TextStyle(fontSize: 16)),

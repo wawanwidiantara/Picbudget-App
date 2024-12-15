@@ -1,7 +1,9 @@
 import 'dart:ffi';
 
 import 'package:get/get.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:picbudget_app/app/data/models/item.dart';
+import 'package:picbudget_app/app/data/models/label.dart';
 import 'package:picbudget_app/app/data/models/transaction.dart';
 import 'package:picbudget_app/app/modules/transaction/controllers/transaction_controller.dart';
 
@@ -12,6 +14,11 @@ class TransactionDetailController extends GetxController {
   var transactionDetail = Rxn<Transaction>();
   var transactionItems = <Item>[].obs;
 
+  var availableLabels = <Label>[].obs;
+  var selectedLabelIds = <String>[].obs;
+
+  final dropdownController = MultiSelectController<Label>();
+
   var isLoading = false.obs;
 
   @override
@@ -19,6 +26,8 @@ class TransactionDetailController extends GetxController {
     super.onInit();
     fetchTransactionDetail();
     fetchTransactionItems();
+    fetchAvailableLabels();
+    fetchTransactionLabels();
   }
 
   Future<void> fetchTransactionDetail() async {
@@ -106,6 +115,77 @@ class TransactionDetailController extends GetxController {
       }
     } else {
       Get.snackbar('Error', 'Invalid item ID, name, or price');
+    }
+  }
+
+  Future<void> fetchAvailableLabels() async {
+    isLoading.value = true;
+    try {
+      await transactionController.fetchLabels();
+      availableLabels.assignAll(transactionController.labels);
+
+      dropdownController.setItems(
+        availableLabels
+            .map((label) => DropdownItem(label: label.name, value: label))
+            .toList(),
+      );
+      print('Available labels: $availableLabels');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch labels: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchTransactionLabels() async {
+    if (transactionId == null) {
+      Get.snackbar('Error', 'Transaction ID is missing');
+      return;
+    }
+
+    try {
+      final transaction =
+          await transactionController.getTransactionDetails(transactionId);
+      if (transaction != null) {
+        // Clear previous selections
+        dropdownController.clearAll();
+
+        // Pre-select items matching transaction label IDs
+        transaction.labels.forEach((id) {
+          final index = availableLabels.indexWhere((label) => label.id == id);
+          if (index != -1) {
+            dropdownController.selectAtIndex(index);
+          }
+        });
+
+        // Update selected label IDs for local tracking
+        selectedLabelIds.assignAll(transaction.labels);
+        print('Selected labels: $selectedLabelIds');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch transaction labels: $e');
+    }
+  }
+
+  void updateSelectedLabels(List<Label> newLabels) {
+    selectedLabelIds.assignAll(newLabels.map((label) => label.id));
+  }
+
+  // Save updated labels to the transaction
+  Future<void> saveUpdatedLabels() async {
+    if (transactionId == null) {
+      Get.snackbar('Error', 'Transaction ID is missing');
+      return;
+    }
+
+    try {
+      await transactionController.updateTransactionLabel(
+        transactionId: transactionId,
+        labels: selectedLabelIds.toList(),
+      );
+      Get.snackbar('Success', 'Labels updated successfully');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update labels: $e');
     }
   }
 }

@@ -9,12 +9,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:picbudget_app/app/core/components/snackbar.dart';
 import 'package:picbudget_app/app/core/constants/url.dart';
 import 'package:picbudget_app/app/data/models/item.dart';
+import 'package:picbudget_app/app/data/models/label.dart';
 import 'package:picbudget_app/app/data/models/transaction.dart';
 import 'package:path/path.dart' as path;
 
 class TransactionController extends GetxController {
   var transactions = <Transaction>[].obs;
   var items = <Item>[].obs;
+  var labels = <Label>[].obs;
   var selectedImage = ''.obs;
   File? receiptImage;
   var receipt = ''.obs;
@@ -358,6 +360,129 @@ class TransactionController extends GetxController {
       SnackBarWidget.showSnackBar(
         'Error',
         'Item deletion failed. Please try again.',
+        'err',
+      );
+    }
+  }
+
+  Future<void> fetchLabels() async {
+    final storage = GetStorage();
+    final token = storage.read('access');
+    var url = Uri.parse("${UrlApi.baseAPI}/api/labels/");
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        final List<dynamic> labelData = jsonResponse['data'];
+
+        labels.value =
+            labelData.map((labelJson) => Label.fromJson(labelJson)).toList();
+        SnackBarWidget.showSnackBar(
+          'Success',
+          'Labels fetched successfully!',
+          'success',
+        );
+      } else {
+        SnackBarWidget.showSnackBar(
+          'Error',
+          'Failed to fetch labels',
+          'err',
+        );
+      }
+    } catch (e) {
+      SnackBarWidget.showSnackBar(
+        'Error',
+        'Failed to fetch labels: $e',
+        'err',
+      );
+    }
+  }
+
+  Future<Label?> getLabelDetail(String id) async {
+    final storage = GetStorage();
+    final token = storage.read('access');
+    var url = Uri.parse("${UrlApi.baseAPI}/api/labels/$id/");
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse['data'] != null) {
+          return Label.fromJson(jsonResponse['data']);
+        } else {
+          SnackBarWidget.showSnackBar(
+            'Error',
+            'Label data not found.',
+            'err',
+          );
+          return null;
+        }
+      } else {
+        SnackBarWidget.showSnackBar(
+          'Error',
+          'Failed to fetch label details. Status: ${response.statusCode}',
+          'err',
+        );
+        return null;
+      }
+    } catch (e) {
+      SnackBarWidget.showSnackBar(
+        'Error',
+        'Failed to fetch label details: $e',
+        'err',
+      );
+      return null;
+    }
+  }
+
+  Future<void> updateTransactionLabel({
+    required String transactionId,
+    required List<String> labels,
+  }) async {
+    final storage = GetStorage();
+    final token = storage.read('access');
+    var url = Uri.parse("${UrlApi.baseAPI}/api/transactions/$transactionId/");
+
+    try {
+      final response = await http.patch(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'labels': labels
+        }),
+      );
+
+      if (response.statusCode == 200) {
+      } else {
+        SnackBarWidget.showSnackBar(
+          'Error',
+          response.body,
+          'err',
+        );
+      }
+    } catch (e) {
+      SnackBarWidget.showSnackBar(
+        'Error',
+        'Failed to update item $e',
         'err',
       );
     }
