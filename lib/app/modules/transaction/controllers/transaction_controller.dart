@@ -22,7 +22,7 @@ class TransactionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchTransactions(); // Fetch transactions when the controller is initialized
+    fetchTransactions();
   }
 
   Future<void> fetchTransactions({
@@ -32,10 +32,9 @@ class TransactionController extends GetxController {
     String? type,
   }) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/transactions/");
 
-    // Add query parameters if provided
     final queryParameters = {
       if (transactionDateFrom != null)
         'transaction_date_from': transactionDateFrom,
@@ -57,27 +56,19 @@ class TransactionController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Parse the response
         final jsonResponse = jsonDecode(response.body);
         final List<dynamic> transactionData = jsonResponse['data'];
 
-        // Map to Transaction model
         transactions.value = transactionData
             .map((transactionJson) => Transaction.fromJson(transactionJson))
             .toList();
-
-        // Log success
-      } else {
-        // Handle error response
-      }
-    } catch (e) {
-      // Handle exceptions
-    }
+      } else {}
+    } catch (e) {}
   }
 
   Future<Transaction?> getTransactionDetails(String id) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/transactions/$id/");
 
     try {
@@ -90,15 +81,17 @@ class TransactionController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Parse the response
         final jsonResponse = jsonDecode(response.body);
-        return Transaction.fromJson(jsonResponse);
+
+        if (jsonResponse['data'] != null) {
+          return Transaction.fromJson(jsonResponse['data']);
+        } else {
+          return Transaction.fromJson(jsonResponse);
+        }
       } else {
-        // Handle error response
         return null;
       }
     } catch (e) {
-      // Handle exceptions
       return null;
     }
   }
@@ -112,7 +105,7 @@ class TransactionController extends GetxController {
     required List<String> labels,
   }) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/transactions/");
 
     var request = http.MultipartRequest('POST', url)
@@ -131,13 +124,8 @@ class TransactionController extends GetxController {
       final response = await request.send();
 
       if (response.statusCode == 201) {
-        // Successfully created
-      } else {
-        // Handle error response
-      }
-    } catch (e) {
-      // Handle exceptions
-    }
+      } else {}
+    } catch (e) {}
   }
 
   Future<void> updateTransaction({
@@ -150,7 +138,7 @@ class TransactionController extends GetxController {
     required List<String> labels,
   }) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/transactions/$id/");
 
     var request = http.MultipartRequest('PUT', url)
@@ -169,18 +157,13 @@ class TransactionController extends GetxController {
       final response = await request.send();
 
       if (response.statusCode == 200) {
-        // Successfully updated
-      } else {
-        // Handle error response
-      }
-    } catch (e) {
-      // Handle exceptions
-    }
+      } else {}
+    } catch (e) {}
   }
 
   Future<void> deleteTransaction(String id) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/transactions/$id/");
 
     try {
@@ -194,18 +177,13 @@ class TransactionController extends GetxController {
 
       if (response.statusCode == 204) {
         transactions.removeWhere((transaction) => transaction.id == id);
-        // Successfully deleted
-      } else {
-        // Handle error response
-      }
-    } catch (e) {
-      // Handle exceptions
-    }
+      } else {}
+    } catch (e) {}
   }
 
-  Future<void> fetchTransactionItems(String transactionId) async {
+  Future<List<Item>> fetchTransactionItems(String transactionId) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse(
         "${UrlApi.baseAPI}/api/transaction-items/?transaction=$transactionId");
 
@@ -219,24 +197,41 @@ class TransactionController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Parse the response
         final jsonResponse = jsonDecode(response.body);
-        final List<dynamic> itemData = jsonResponse['data'];
-
-        // Map to Item model
-        items.value =
-            itemData.map((itemJson) => Item.fromJson(itemJson)).toList();
+        if (jsonResponse['data'] != null) {
+          final List<dynamic> itemData = jsonResponse['data'];
+          final List<Item> itemList =
+              itemData.map((itemJson) => Item.fromJson(itemJson)).toList();
+          return itemList;
+        } else {
+          SnackBarWidget.showSnackBar(
+            'Error',
+            'Failed to fetch transaction items',
+            'err',
+          );
+          return [];
+        }
       } else {
-        // Handle error response
+        SnackBarWidget.showSnackBar(
+          'Error',
+          'Failed to fetch transaction items',
+          'err',
+        );
+        return [];
       }
     } catch (e) {
-      // Handle exceptions
+      SnackBarWidget.showSnackBar(
+        'Error',
+        'Failed to fetch transaction items',
+        'err',
+      );
+      return [];
     }
   }
 
   Future<Item?> getTransactionItemDetail(String itemId) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/transaction-items/$itemId/");
 
     try {
@@ -250,12 +245,16 @@ class TransactionController extends GetxController {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        return Item.fromJson(jsonResponse['data']);
+        if (jsonResponse['data'] != null) {
+          return Item.fromJson(jsonResponse['data']);
+        } else {
+          return Item.fromJson(jsonResponse);
+        }
       } else {
-        return null; // Handle error response
+        return null;
       }
     } catch (e) {
-      return null; // Handle exceptions
+      return null;
     }
   }
 
@@ -265,7 +264,7 @@ class TransactionController extends GetxController {
     required double itemPrice,
   }) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/transaction-items/");
 
     try {
@@ -283,13 +282,8 @@ class TransactionController extends GetxController {
       );
 
       if (response.statusCode == 201) {
-        // Successfully created
-      } else {
-        // Handle error response
-      }
-    } catch (e) {
-      // Handle exceptions
-    }
+      } else {}
+    } catch (e) {}
   }
 
   Future<void> updateTransactionItem({
@@ -298,11 +292,11 @@ class TransactionController extends GetxController {
     required double itemPrice,
   }) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/transaction-items/$itemId/");
 
     try {
-      final response = await http.put(
+      final response = await http.patch(
         url,
         headers: {
           'Authorization': 'Bearer $token',
@@ -315,18 +309,25 @@ class TransactionController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Successfully updated
       } else {
-        // Handle error response
+        SnackBarWidget.showSnackBar(
+          'Error',
+          response.body,
+          'err',
+        );
       }
     } catch (e) {
-      // Handle exceptions
+      SnackBarWidget.showSnackBar(
+        'Error',
+        'Failed to update item $e',
+        'err',
+      );
     }
   }
 
   Future<void> deleteTransactionItem(String itemId) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/transaction-items/$itemId/");
 
     try {
@@ -361,6 +362,7 @@ class TransactionController extends GetxController {
       );
     }
   }
+
   Future<void> getReceiptImage(ImageSource imageSource) async {
     final ImagePicker _picker = ImagePicker();
     final pickedFile = await _picker.pickImage(source: imageSource);
@@ -401,7 +403,7 @@ class TransactionController extends GetxController {
     var result = await FlutterImageCompress.compressAndGetFile(
       image.absolute.path,
       compressedImagePath,
-      quality: 50, // Adjust the quality as needed
+      quality: 50,
     );
 
     return result;

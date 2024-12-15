@@ -106,7 +106,8 @@ class PicScanView extends GetView<PicScanController> {
                             ),
                             InkWell(
                               onTap: () {
-                                Get.to(() => const TransactionDetailView());
+                                Get.to(() => const TransactionDetailView(),
+                                    arguments: controller.nerResult["id"]);
                               },
                               child: Text(
                                 'Detail',
@@ -221,33 +222,35 @@ class PicScanView extends GetView<PicScanController> {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: ActionSlider.standard(
-          sliderBehavior: SliderBehavior.stretch,
-          toggleColor: AppColors.white,
-          backgroundColor: AppColors.secondary,
-          action: (ctrl) async {
-            ctrl.loading();
-            await controller.confirmTransaction(
-                transactionId: controller.nerResult['id'].toString());
-            if (controller.transactionCreated.value) {
-              ctrl.success();
-              await Future.delayed(const Duration(milliseconds: 1500));
-              Get.offAllNamed(Routes.NAVBAR);
-            } else {
-              ctrl.reset();
-            }
-          },
-          child: Text(
-            'Geser untuk menyimpan',
-            style: AppTypography.bodyLarge.copyWith(
-              color: AppColors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+      floatingActionButton: Obx(() => controller.nerResult.isEmpty
+          ? SizedBox()
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: ActionSlider.standard(
+                sliderBehavior: SliderBehavior.stretch,
+                toggleColor: AppColors.white,
+                backgroundColor: AppColors.secondary,
+                action: (ctrl) async {
+                  ctrl.loading();
+                  await controller.confirmTransaction(
+                      transactionId: controller.nerResult['id'].toString());
+                  if (controller.transactionCreated.value) {
+                    ctrl.success();
+                    await Future.delayed(const Duration(milliseconds: 1500));
+                    Get.offAllNamed(Routes.NAVBAR);
+                  } else {
+                    ctrl.reset();
+                  }
+                },
+                child: Text(
+                  'Geser untuk menyimpan',
+                  style: AppTypography.bodyLarge.copyWith(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

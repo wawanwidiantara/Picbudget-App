@@ -9,7 +9,6 @@ import 'package:picbudget_app/app/modules/home/views/home_view.dart';
 import 'package:picbudget_app/app/modules/profile/views/profile_view.dart';
 import 'package:picbudget_app/app/modules/transaction/views/transaction_view.dart';
 import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
-import 'package:picbudget_app/app/routes/app_pages.dart';
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 
 import '../controllers/navbar_controller.dart';
@@ -20,6 +19,7 @@ class NavbarView extends GetView<NavbarController> {
   Widget build(BuildContext context) {
     final extract = Get.put(ExtractReceiptController());
     final wallet = Get.put(WalletController());
+    wallet.fetchWallets();
 
     return GetBuilder<NavbarController>(builder: (controller) {
       return Scaffold(
@@ -98,7 +98,8 @@ class NavbarView extends GetView<NavbarController> {
                   }
                 },
                 onDoubleTap: () {
-                  Get.to(TransactionView());
+                  Get.to(() => TransactionView(),
+                      arguments: wallet.getFirstWalletId());
                 },
                 child: Container(
                   width: 60,

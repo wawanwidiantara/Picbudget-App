@@ -1,7 +1,7 @@
 class Item {
   final String id;
-  final String itemName;
-  final String itemPrice;
+  String itemName;
+  double itemPrice; // Corrected to use Dart's `double` type
   final DateTime createdAt;
   final DateTime updatedAt;
   final String transaction;
@@ -19,7 +19,8 @@ class Item {
     return Item(
       id: json['id'] as String,
       itemName: json['item_name'] as String,
-      itemPrice: json['item_price'] as String,
+      itemPrice:
+          double.parse(json['item_price'].toString()), // Safely parse to double
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
       transaction: json['transaction'] as String,

@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Transaction {
   final String id;
   final String type;
@@ -59,5 +61,10 @@ class Transaction {
       'wallet': wallet,
       'labels': labels,
     };
+  }
+
+  String getFormattedTransactionDate() {
+    final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
+    return formatter.format(transactionDate.toLocal());
   }
 }

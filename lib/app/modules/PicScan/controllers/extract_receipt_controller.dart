@@ -11,6 +11,7 @@ import 'package:picbudget_app/app/core/components/snackbar.dart';
 import 'package:picbudget_app/app/core/constants/url.dart';
 import 'package:picbudget_app/app/data/models/transaction.dart';
 import 'package:picbudget_app/app/modules/PicScan/views/pic_scan_view.dart';
+import 'package:picbudget_app/app/routes/app_pages.dart';
 
 class ExtractReceiptController extends GetxController {
   var selectedImage = ''.obs;
@@ -125,6 +126,7 @@ class ExtractReceiptController extends GetxController {
             'Receipt extraction failed. Please try again.',
             'err',
           );
+          Get.offAllNamed(Routes.NAVBAR);
         }
       } else {
         // Handle non-200 response codes
@@ -134,6 +136,7 @@ class ExtractReceiptController extends GetxController {
           'Error ${response.statusCode}: ${responseData.body}',
           'err',
         );
+        Get.offAllNamed(Routes.NAVBAR);
       }
     } catch (e) {
       // Handle request errors
@@ -142,6 +145,7 @@ class ExtractReceiptController extends GetxController {
         'An error occurred: $e',
         'err',
       );
+      Get.offAllNamed(Routes.NAVBAR);
     }
   }
 }
