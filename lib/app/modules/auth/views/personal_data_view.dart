@@ -90,7 +90,7 @@ class PersonalDataView extends GetView<PersonalDataController> {
                                     DropdownMenuItem(
                                       value: "female",
                                       child: Text(
-                                        "Perempuan",
+                                        "Female",
                                         style: AppTypography.bodyMedium
                                             .copyWith(color: AppColors.black),
                                       ),

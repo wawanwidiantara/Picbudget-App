@@ -170,7 +170,6 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ],
               ),
-              // Spending Overview Section
               Obx(() {
                 if (controller.spendingData.isEmpty) {
                   return Center(child: CircularProgressIndicator());
