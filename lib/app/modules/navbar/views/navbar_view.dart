@@ -78,11 +78,16 @@ class NavbarView extends GetView<NavbarController> {
                   if (walletId != null) {
                     extract.getReceiptImage(ImageSource.camera, walletId);
                   } else {
-                    SnackBarWidget.showSnackBar(
-                      'Transaksi Gagal',
-                      'Error: No wallet found.',
-                      'err',
-                    );
+                    wallet.fetchWallets();
+                    if (walletId != null) {
+                      extract.getReceiptImage(ImageSource.camera, walletId);
+                    } else {
+                      SnackBarWidget.showSnackBar(
+                        'Transaksi Gagal',
+                        'Error: No wallet found.',
+                        'err',
+                      );
+                    }
                   }
                 },
                 onLongPress: () {
@@ -90,11 +95,16 @@ class NavbarView extends GetView<NavbarController> {
                   if (walletId != null) {
                     extract.getReceiptImage(ImageSource.gallery, walletId);
                   } else {
-                    SnackBarWidget.showSnackBar(
-                      'Transaksi Gagal',
-                      'Error: No wallet found.',
-                      'err',
-                    );
+                    wallet.fetchWallets();
+                    if (walletId != null) {
+                      extract.getReceiptImage(ImageSource.camera, walletId);
+                    } else {
+                      SnackBarWidget.showSnackBar(
+                        'Transaksi Gagal',
+                        'Error: No wallet found.',
+                        'err',
+                      );
+                    }
                   }
                 },
                 onDoubleTap: () {

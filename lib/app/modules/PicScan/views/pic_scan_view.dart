@@ -35,36 +35,7 @@ class PicScanView extends GetView<PicScanController> {
             padding: const EdgeInsets.all(24.0),
             child: Obx(
               () => controller.nerResult.isEmpty
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                          const SizedBox(
-                            height: 32,
-                          ),
-                          Lottie.asset(
-                            'assets/lotties/scan_loading_v3.json',
-                          ),
-                          Text(
-                            'The Receipt is Being Processed',
-                            textAlign: TextAlign.center,
-                            style: AppTypography.titleLarge.copyWith(
-                              color: AppColors.secondary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Text(
-                            'Processing the receipt with PicScan. Please wait a moment...',
-                            textAlign: TextAlign.center,
-                            style: AppTypography.bodyLarge.copyWith(
-                              color: AppColors.secondary,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ])
+                  ? LoadingScan()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -98,7 +69,7 @@ class PicScanView extends GetView<PicScanController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Total Belanja',
+                              'Amount',
                               style: AppTypography.bodyLarge.copyWith(
                                 color: AppColors.secondary,
                                 fontWeight: FontWeight.bold,
@@ -135,7 +106,7 @@ class PicScanView extends GetView<PicScanController> {
                         Row(
                           children: [
                             Text(
-                              'Tanggal',
+                              'Date',
                               style: AppTypography.bodyMedium.copyWith(
                                 color: AppColors.secondary,
                                 fontWeight: FontWeight.normal,
@@ -163,7 +134,7 @@ class PicScanView extends GetView<PicScanController> {
                         Row(
                           children: [
                             Text(
-                              'Tempat',
+                              'Place',
                               style: AppTypography.bodyMedium.copyWith(
                                 color: AppColors.secondary,
                                 fontWeight: FontWeight.normal,
@@ -188,7 +159,7 @@ class PicScanView extends GetView<PicScanController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Alamat',
+                              'Location',
                               style: AppTypography.bodyMedium.copyWith(
                                 color: AppColors.secondary,
                                 fontWeight: FontWeight.normal,
@@ -253,5 +224,45 @@ class PicScanView extends GetView<PicScanController> {
             )),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+}
+
+class LoadingScan extends StatelessWidget {
+  const LoadingScan({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 32,
+          ),
+          Lottie.asset(
+            'assets/lotties/scan_loading_v3.json',
+          ),
+          Text(
+            'The Receipt is Being Processed',
+            textAlign: TextAlign.center,
+            style: AppTypography.titleLarge.copyWith(
+              color: AppColors.secondary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Text(
+            'Processing the receipt with PicScan. Please wait a moment...',
+            textAlign: TextAlign.center,
+            style: AppTypography.bodyLarge.copyWith(
+              color: AppColors.secondary,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ]);
   }
 }

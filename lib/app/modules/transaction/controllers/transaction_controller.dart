@@ -385,11 +385,6 @@ class TransactionController extends GetxController {
 
         labels.value =
             labelData.map((labelJson) => Label.fromJson(labelJson)).toList();
-        SnackBarWidget.showSnackBar(
-          'Success',
-          'Labels fetched successfully!',
-          'success',
-        );
       } else {
         SnackBarWidget.showSnackBar(
           'Error',
@@ -466,9 +461,7 @@ class TransactionController extends GetxController {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({
-          'labels': labels
-        }),
+        body: jsonEncode({'labels': labels}),
       );
 
       if (response.statusCode == 200) {
