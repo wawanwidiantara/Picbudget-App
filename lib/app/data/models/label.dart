@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Label {
   final String id;
   final String name;
@@ -18,7 +20,7 @@ class Label {
     return Label(
       id: json['id'] as String,
       name: json['name'] as String,
-      emoticon: json['emoticon'] as String,
+      emoticon: utf8.decode(json['emoticon'].toString().runes.toList()),
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );

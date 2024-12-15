@@ -68,54 +68,53 @@ class TransactionDetailView extends GetView<TransactionDetailController> {
                             'Date: ${transaction.getFormattedTransactionDate()}',
                             style: TextStyle(fontSize: 16)),
                         SizedBox(height: 16),
-                        Text('Labels:', style: TextStyle(fontSize: 16)),
-                        Chip(label: Text('🥤Labels')),
-                        SizedBox(height: 16),
-                        Text('Labels:', style: TextStyle(fontSize: 16)),
-                        SizedBox(height: 8),
-                        MultiDropdown<Label>(
-                          items: controller.availableLabels.map((label) {
-                            return DropdownItem(
-                              label: label.name,
-                              value: label,
+                        Text('Labels:',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 4.0,
+                          runSpacing: 0.0,
+                          children: controller.availableLabels.map((label) {
+                            final isSelected =
+                                controller.selectedLabels.contains(label);
+
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                splashFactory: NoSplash
+                                    .splashFactory, // Disable ripple effect
+                              ),
+                              child: ChoiceChip(
+                                label: Text(
+                                  "${label.emoticon} ${label.name}",
+                                  style: AppTypography.labelMedium.copyWith(
+                                    color: isSelected
+                                        ? AppColors.secondary
+                                        : AppColors.secondary,
+                                  ),
+                                ),
+                                backgroundColor: AppColors.white,
+                                selectedColor:
+                                    AppColors.brandColor.brandColor25,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: isSelected
+                                        ? AppColors.primary
+                                        : AppColors.neutral.neutralColor600,
+                                    width: 1.5, // Border width
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                      20), // Rounded corners
+                                ),
+                                selected: isSelected,
+                                onSelected: (selected) {
+                                  controller.toggleLabelSelection(label);
+                                },
+                              ),
                             );
                           }).toList(),
-                          controller: controller.dropdownController,
-                          enabled: true,
-                          searchEnabled: false,
-                          chipDecoration: ChipDecoration(
-                            backgroundColor: AppColors.primary,
-                            wrap: true,
-                            runSpacing: 4,
-                            spacing: 8,
-                          ),
-                          fieldDecoration: FieldDecoration(
-                            hintText: 'Select Labels',
-                            hintStyle: TextStyle(color: AppColors.black),
-                            prefixIcon: const Icon(Icons.label),
-                            showClearIcon: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(
-                                  color: AppColors.neutral.neutralColor600),
-                            ),
-                          ),
-                          dropdownDecoration: const DropdownDecoration(
-                            marginTop: 2,
-                            maxHeight: 300,
-                          ),
-                          dropdownItemDecoration: DropdownItemDecoration(
-                            selectedIcon:
-                                const Icon(Icons.check, color: Colors.blue),
-                            disabledIcon:
-                                Icon(Icons.lock, color: Colors.grey.shade300),
-                          ),
-                          onSelectionChange: (selectedItems) {
-                            controller.updateSelectedLabels(
-                              selectedItems.map((item) => item).toList(),
-                            );
-                          },
                         ),
+                        SizedBox(height: 16),
                         if (transactionItems.isNotEmpty) ...[
                           SizedBox(height: 16),
                           Text('Items:', style: TextStyle(fontSize: 16)),
@@ -130,14 +129,12 @@ class TransactionDetailView extends GetView<TransactionDetailController> {
                                 subtitle: Text(
                                     'Price: ${item.itemPrice.toStringAsFixed(2)}'),
                                 trailing: Row(
-                                  mainAxisSize: MainAxisSize
-                                      .min, // Adjust the size of the row to fit its children
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
                                       icon:
                                           Icon(Icons.edit, color: Colors.blue),
                                       onPressed: () async {
-                                        // Show a dialog to edit the item name and price
                                         final updatedData = await showDialog<
                                             Map<String, String>>(
                                           context: context,
