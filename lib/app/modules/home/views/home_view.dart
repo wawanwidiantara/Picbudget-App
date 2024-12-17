@@ -74,29 +74,32 @@ class HomeView extends GetView<HomeController> {
                       );
                     }),
                     SizedBox(height: 24),
-                    Text.rich(
-                      TextSpan(
-                        text: 'You spent ',
-                        style: AppTypography.bodySmall.copyWith(
-                          color: AppColors.secondary,
+                    Obx(() {
+                      return Text.rich(
+                        TextSpan(
+                          text: 'You spent ',
+                          style: AppTypography.bodySmall.copyWith(
+                            color: AppColors.secondary,
+                          ),
+                          children: [
+                            TextSpan(
+                              text:
+                                  'Rp. ${(controller.totalSpending["total_week"] as num).toInt()}',
+                              style: AppTypography.bodySmall.copyWith(
+                                color: AppColors.error.errorColor500,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' this week',
+                              style: AppTypography.bodySmall.copyWith(
+                                color: AppColors.secondary,
+                              ),
+                            ),
+                          ],
                         ),
-                        children: [
-                          TextSpan(
-                            text: 'Rp. 500.000',
-                            style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.error.errorColor500,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' this week',
-                            style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.secondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                      );
+                    })
                   ],
                 ),
               ),
