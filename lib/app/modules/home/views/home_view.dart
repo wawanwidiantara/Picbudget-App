@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
 import 'package:picbudget_app/app/data/models/wallet.dart';
+import 'package:picbudget_app/app/modules/transaction/views/transaction_history_view.dart';
 import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
 import 'package:picbudget_app/app/routes/app_pages.dart';
 
@@ -61,8 +62,6 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                     SizedBox(height: 12),
-                    // Wallet Balance using Obx
-
                     Obx(() {
                       return Text(
                         'Rp. ${wallet.totalBalance.value}',
@@ -102,7 +101,6 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
               SizedBox(height: 24),
-              // Row of circular buttons with icons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -111,29 +109,22 @@ class HomeView extends GetView<HomeController> {
                     label: 'Wallet',
                     onTap: () {
                       Get.toNamed(Routes.WALLET);
-                      // Add Transaction Action
                     },
                   ),
                   _buildCircularButton(
                     icon: Icons.track_changes_rounded,
                     label: 'PicPlan',
-                    onTap: () {
-                      // Add Budget Action
-                    },
+                    onTap: () {},
                   ),
                   _buildCircularButton(
                     icon: Icons.bar_chart,
                     label: 'Report',
-                    onTap: () {
-                      // View Report Action
-                    },
+                    onTap: () {},
                   ),
                   _buildCircularButton(
                     icon: Icons.keyboard_voice_rounded,
                     label: 'PicVoice',
-                    onTap: () {
-                      // Settings Action
-                    },
+                    onTap: () {},
                   ),
                 ],
               ),
@@ -149,7 +140,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // View More Action
+                      Get.to(TransactionHistoryView());
                     },
                     child: Row(
                       children: [
@@ -246,11 +237,9 @@ class SpendingOverview extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            // Stacked Bar Chart with Gaps
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Bar with Gaps
                 SizedBox(
                   height: 24,
                   width: double.infinity,
@@ -270,7 +259,6 @@ class SpendingOverview extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8),
-                // Category Legend
                 Column(
                   children: spendingData.map((data) {
                     return Padding(
@@ -282,14 +270,6 @@ class SpendingOverview extends StatelessWidget {
                             backgroundColor: _hexToColor(data['color']),
                           ),
                           SizedBox(width: 8),
-                          // Expanded(
-                          //   child: Text(
-                          //     data['category'],
-                          //     style: AppTypography.labelMedium.copyWith(
-                          //       color: AppColors.secondary,
-                          //     ),
-                          //   ),
-                          // ),
                           Expanded(
                             child: Text(
                               "${data['category']}",

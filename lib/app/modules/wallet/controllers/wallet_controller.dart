@@ -6,22 +6,21 @@ import 'package:picbudget_app/app/core/constants/url.dart';
 import 'package:picbudget_app/app/data/models/wallet.dart';
 
 class WalletController extends GetxController {
-  // Observable list of wallets
   var wallets = <Wallet>[].obs;
   var totalBalance = 0.0.obs;
+  var walletCreated = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchWallets(); // Fetch wallets when the controller is initialized
+    fetchWallets();
   }
 
   Future<void> fetchWallets() async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
-    final userId = storage.read('user')['id']; // Retrieve user ID
+    final token = storage.read('access');
+    final userId = storage.read('user')['id'];
     var url = Uri.parse("${UrlApi.baseAPI}/api/wallets/");
-    // Replace with your base URL
 
     try {
       final response = await http.get(
@@ -33,29 +32,26 @@ class WalletController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Parse the response
         final jsonResponse = jsonDecode(response.body);
         final List<dynamic> walletData = jsonResponse['data'];
-
-        // Filter wallets by user ID and map to Wallet model
         wallets.value = walletData
             .where((wallet) => wallet['user'] == userId)
             .map((walletJson) => Wallet.fromJson(walletJson))
             .toList();
-
-        // Log success
       } else {
-        // Handle error response
+        return;
       }
     } catch (e) {
-      // Handle exceptions
+      return;
     }
   }
 
   Future<void> createWallet(String name, String type, double balance) async {
+    walletCreated(false);
+
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
-    final userId = storage.read('user')['id']; // Retrieve user ID
+    final token = storage.read('access');
+    final userId = storage.read('user')['id'];
     var url = Uri.parse("${UrlApi.baseAPI}/api/wallets/");
 
     try {
@@ -74,24 +70,22 @@ class WalletController extends GetxController {
       );
 
       if (response.statusCode == 201) {
-        // Parse the response
         final jsonResponse = jsonDecode(response.body);
         final Wallet newWallet = Wallet.fromJson(jsonResponse);
-        wallets.add(newWallet); // Add new wallet to the list
-
-        // Log success
+        wallets.add(newWallet);
+        walletCreated(true);
       } else {
-        // Handle error response
+        walletCreated(false);
       }
     } catch (e) {
-      // Handle exceptions
+      walletCreated(false);
     }
   }
 
   Future<void> updateWallet(
       String id, String name, String type, double balance) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/wallets/$id/");
 
     try {
@@ -109,30 +103,22 @@ class WalletController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Parse the response
         final jsonResponse = jsonDecode(response.body);
         final Wallet updatedWallet = Wallet.fromJson(jsonResponse);
 
-        // Update the wallet in the list
         wallets.value = wallets.map((wallet) {
           if (wallet.id == id) {
             return updatedWallet;
           }
           return wallet;
         }).toList();
-
-        // Log success
-      } else {
-        // Handle error response
-      }
-    } catch (e) {
-      // Handle exceptions
-    }
+      } else {}
+    } catch (e) {}
   }
 
   Future<void> deleteWallet(String id) async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/wallets/$id/");
 
     try {
@@ -145,21 +131,14 @@ class WalletController extends GetxController {
       );
 
       if (response.statusCode == 204) {
-        // Remove the wallet from the list
         wallets.removeWhere((wallet) => wallet.id == id);
-
-        // Log success
-      } else {
-        // Handle error response
-      }
-    } catch (e) {
-      // Handle exceptions
-    }
+      } else {}
+    } catch (e) {}
   }
 
   Future<void> fetchTotalBalance() async {
     final storage = GetStorage();
-    final token = storage.read('access'); // Retrieve API token
+    final token = storage.read('access');
     var url = Uri.parse("${UrlApi.baseAPI}/api/wallets/total-balance/");
 
     try {
@@ -172,21 +151,41 @@ class WalletController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Parse the response
         final jsonResponse = jsonDecode(response.body);
         totalBalance.value = jsonResponse['data']['total_balance'];
-      } else {
-        // Handle error response
-      }
-    } catch (e) {
-      // Handle exceptions
-    }
+      } else {}
+    } catch (e) {}
   }
 
   String? getFirstWalletId() {
     if (wallets.isNotEmpty) {
       return wallets.first.id;
     }
-    return null; // Return null if the list is empty
+    return null;
+  }
+
+  Future<String> getWalletType(String walletId) async {
+    final storage = GetStorage();
+    final token = storage.read('access');
+    var url = Uri.parse("${UrlApi.baseAPI}/api/wallets/$walletId/");
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        return jsonResponse['data']['type'];
+      } else {
+        return '';
+      }
+    } catch (e) {
+      return '';
+    }
   }
 }

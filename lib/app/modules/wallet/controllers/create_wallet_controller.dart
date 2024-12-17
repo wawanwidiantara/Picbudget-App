@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:picbudget_app/app/core/components/snackbar.dart';
 import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
 
 class CreateWalletController extends GetxController {
@@ -35,7 +36,15 @@ class CreateWalletController extends GetxController {
       final balance = double.parse(amountController.text);
 
       await walletController.createWallet(name, type, balance);
-      Get.back();
+      if (walletController.walletCreated.value) {
+        Get.back();
+        SnackBarWidget.showSnackBar(
+            'Wallet Created', 'Your wallet has been created', 'success');
+      } else {
+        Get.back();
+        SnackBarWidget.showSnackBar(
+            'Failed to Create Wallet', 'Please try again', 'err');
+      }
     }
   }
 }

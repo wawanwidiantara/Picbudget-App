@@ -66,7 +66,6 @@ class OTPForm extends StatelessWidget {
         controller: controller,
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
-        maxLength: 6,
         style: AppTypography.headlineMedium.copyWith(
           fontWeight: FontWeight.bold,
         ),
