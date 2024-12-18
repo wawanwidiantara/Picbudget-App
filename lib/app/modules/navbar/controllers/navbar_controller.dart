@@ -25,9 +25,4 @@ class NavbarController extends GetxController {
     super.onReady();
     update();
   }
-
-  // @override
-  // void onClose() {
-  //   super.onClose();
-  // }
 }

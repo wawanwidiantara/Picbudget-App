@@ -14,6 +14,7 @@ class WalletController extends GetxController {
   void onInit() {
     super.onInit();
     fetchWallets();
+    fetchTotalBalance();
   }
 
   Future<void> fetchWallets() async {
@@ -153,8 +154,13 @@ class WalletController extends GetxController {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         totalBalance.value = jsonResponse['data']['total_balance'];
-      } else {}
-    } catch (e) {}
+        print(totalBalance.value);
+      } else {
+        print('error');
+      }
+    } catch (e) {
+      print('error');
+    }
   }
 
   String? getFirstWalletId() {

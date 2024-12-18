@@ -24,23 +24,7 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             children: [
               SizedBox(height: 24),
-              Row(
-                children: [
-                  SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: Image.asset(
-                        "assets/images/picbudget logo primary.png",
-                      )),
-                  SizedBox(width: 16),
-                  Text(
-                    'Hi, PicPlanners ✋',
-                    style: AppTypography.titleLarge.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+              Header(),
               SizedBox(height: 24),
               Container(
                 width: double.infinity,
@@ -75,98 +59,29 @@ class HomeView extends GetView<HomeController> {
                     }),
                     SizedBox(height: 24),
                     Obx(() {
-                      return Text.rich(
-                        TextSpan(
-                          text: 'You spent ',
-                          style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.secondary,
-                          ),
-                          children: [
-                            TextSpan(
-                              text:
-                                  'Rp. ${(controller.totalSpending["total_week"] as num).toInt()}',
-                              style: AppTypography.bodySmall.copyWith(
-                                color: AppColors.error.errorColor500,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: ' this week',
-                              style: AppTypography.bodySmall.copyWith(
-                                color: AppColors.secondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                      if (controller.totalSpending.isEmpty) {
+                        return Text("You haven't spent anything yet",
+                            style: AppTypography.bodySmall.copyWith(
+                              color: AppColors.secondary,
+                            ));
+                      } else {
+                        return SpendingWeek(controller: controller);
+                      }
                     })
                   ],
                 ),
               ),
               SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildCircularButton(
-                    icon: Icons.account_balance_wallet,
-                    label: 'Wallet',
-                    onTap: () {
-                      Get.toNamed(Routes.WALLET);
-                    },
-                  ),
-                  _buildCircularButton(
-                    icon: Icons.track_changes_rounded,
-                    label: 'PicPlan',
-                    onTap: () {},
-                  ),
-                  _buildCircularButton(
-                    icon: Icons.bar_chart,
-                    label: 'Report',
-                    onTap: () {},
-                  ),
-                  _buildCircularButton(
-                    icon: Icons.keyboard_voice_rounded,
-                    label: 'PicVoice',
-                    onTap: () {},
-                  ),
-                ],
-              ),
+              _allFeature(),
               SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Spending Overview',
-                    style: AppTypography.titleMedium.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(TransactionHistoryView());
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          'More',
-                          style: AppTypography.bodyMedium.copyWith(
-                            color: AppColors.neutral.neutralColor600,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          size: 16,
-                          color: AppColors.neutral.neutralColor600,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              SpendingHeader(),
               Obx(() {
                 if (controller.spendingData.isEmpty) {
-                  return Center(child: CircularProgressIndicator());
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child:
+                        Center(child: Text("You haven't spent anything yet")),
+                  );
                 }
                 return SpendingOverview(controller.spendingData);
               }),
@@ -174,6 +89,36 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ),
+    );
+  }
+
+  Row _allFeature() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildCircularButton(
+          icon: Icons.account_balance_wallet,
+          label: 'Wallet',
+          onTap: () {
+            Get.toNamed(Routes.WALLET);
+          },
+        ),
+        _buildCircularButton(
+          icon: Icons.track_changes_rounded,
+          label: 'PicPlan',
+          onTap: () {},
+        ),
+        _buildCircularButton(
+          icon: Icons.bar_chart,
+          label: 'Report',
+          onTap: () {},
+        ),
+        _buildCircularButton(
+          icon: Icons.keyboard_voice_rounded,
+          label: 'PicVoice',
+          onTap: () {},
+        ),
+      ],
     );
   }
 
@@ -200,6 +145,113 @@ class HomeView extends GetView<HomeController> {
           label,
           style: AppTypography.bodySmall.copyWith(
             color: AppColors.secondary,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SpendingWeek extends StatelessWidget {
+  const SpendingWeek({
+    super.key,
+    required this.controller,
+  });
+
+  final HomeController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        text: 'You spent ',
+        style: AppTypography.bodySmall.copyWith(
+          color: AppColors.secondary,
+        ),
+        children: [
+          TextSpan(
+            text: controller.totalSpending.isEmpty
+                ? 'Rp. -'
+                : 'Rp. ${(controller.totalSpending["total_week"] as num).toInt()}',
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.error.errorColor500,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          TextSpan(
+            text: ' this week',
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.secondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SpendingHeader extends StatelessWidget {
+  const SpendingHeader({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Spending Overview',
+          style: AppTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Get.to(TransactionHistoryView());
+          },
+          child: Row(
+            children: [
+              Text(
+                'More',
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.neutral.neutralColor600,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16,
+                color: AppColors.neutral.neutralColor600,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Header extends StatelessWidget {
+  const Header({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+            width: 24,
+            height: 24,
+            child: Image.asset(
+              "assets/images/picbudget logo primary.png",
+            )),
+        SizedBox(width: 16),
+        Text(
+          'Hi, PicPlanners ✋',
+          style: AppTypography.titleLarge.copyWith(
+            fontWeight: FontWeight.bold,
           ),
         ),
       ],
