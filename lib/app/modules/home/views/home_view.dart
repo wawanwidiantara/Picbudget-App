@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
 import 'package:picbudget_app/app/data/models/wallet.dart';
+import 'package:picbudget_app/app/modules/transaction/views/transaction_history_view.dart';
 import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
 import 'package:picbudget_app/app/routes/app_pages.dart';
 
@@ -23,23 +24,7 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             children: [
               SizedBox(height: 24),
-              Row(
-                children: [
-                  SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: Image.asset(
-                        "assets/images/picbudget logo primary.png",
-                      )),
-                  SizedBox(width: 16),
-                  Text(
-                    'Hi, PicPlanners ✋',
-                    style: AppTypography.titleLarge.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+              Header(),
               SizedBox(height: 24),
               Container(
                 width: double.infinity,
@@ -61,8 +46,6 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                     SizedBox(height: 12),
-                    // Wallet Balance using Obx
-
                     Obx(() {
                       return Text(
                         'Rp. ${wallet.totalBalance.value}',
@@ -75,105 +58,30 @@ class HomeView extends GetView<HomeController> {
                       );
                     }),
                     SizedBox(height: 24),
-                    Text.rich(
-                      TextSpan(
-                        text: 'You spent ',
-                        style: AppTypography.bodySmall.copyWith(
-                          color: AppColors.secondary,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Rp. 500.000',
-                            style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.error.errorColor500,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ' this week',
+                    Obx(() {
+                      if (controller.totalSpending.isEmpty) {
+                        return Text("You haven't spent anything yet",
                             style: AppTypography.bodySmall.copyWith(
                               color: AppColors.secondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                            ));
+                      } else {
+                        return SpendingWeek(controller: controller);
+                      }
+                    })
                   ],
                 ),
               ),
               SizedBox(height: 24),
-              // Row of circular buttons with icons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildCircularButton(
-                    icon: Icons.account_balance_wallet,
-                    label: 'Wallet',
-                    onTap: () {
-                      Get.toNamed(Routes.WALLET);
-                      // Add Transaction Action
-                    },
-                  ),
-                  _buildCircularButton(
-                    icon: Icons.track_changes_rounded,
-                    label: 'PicPlan',
-                    onTap: () {
-                      // Add Budget Action
-                    },
-                  ),
-                  _buildCircularButton(
-                    icon: Icons.bar_chart,
-                    label: 'Report',
-                    onTap: () {
-                      // View Report Action
-                    },
-                  ),
-                  _buildCircularButton(
-                    icon: Icons.keyboard_voice_rounded,
-                    label: 'PicVoice',
-                    onTap: () {
-                      // Settings Action
-                    },
-                  ),
-                ],
-              ),
+              _allFeature(),
               SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Spending Overview',
-                    style: AppTypography.titleMedium.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // View More Action
-                    },
-                    child: Row(
-                      children: [
-                        Text(
-                          'More',
-                          style: AppTypography.bodyMedium.copyWith(
-                            color: AppColors.neutral.neutralColor600,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          size: 16,
-                          color: AppColors.neutral.neutralColor600,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              // Spending Overview Section
+              SpendingHeader(),
               Obx(() {
                 if (controller.spendingData.isEmpty) {
-                  return Center(child: CircularProgressIndicator());
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child:
+                        Center(child: Text("You haven't spent anything yet")),
+                  );
                 }
                 return SpendingOverview(controller.spendingData);
               }),
@@ -181,6 +89,36 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ),
+    );
+  }
+
+  Row _allFeature() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildCircularButton(
+          icon: Icons.account_balance_wallet,
+          label: 'Wallet',
+          onTap: () {
+            Get.toNamed(Routes.WALLET);
+          },
+        ),
+        _buildCircularButton(
+          icon: Icons.track_changes_rounded,
+          label: 'PicPlan',
+          onTap: () {},
+        ),
+        _buildCircularButton(
+          icon: Icons.bar_chart,
+          label: 'Report',
+          onTap: () {},
+        ),
+        _buildCircularButton(
+          icon: Icons.keyboard_voice_rounded,
+          label: 'PicVoice',
+          onTap: () {},
+        ),
+      ],
     );
   }
 
@@ -207,6 +145,113 @@ class HomeView extends GetView<HomeController> {
           label,
           style: AppTypography.bodySmall.copyWith(
             color: AppColors.secondary,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SpendingWeek extends StatelessWidget {
+  const SpendingWeek({
+    super.key,
+    required this.controller,
+  });
+
+  final HomeController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        text: 'You spent ',
+        style: AppTypography.bodySmall.copyWith(
+          color: AppColors.secondary,
+        ),
+        children: [
+          TextSpan(
+            text: controller.totalSpending.isEmpty
+                ? 'Rp. -'
+                : 'Rp. ${(controller.totalSpending["total_week"] as num).toInt()}',
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.error.errorColor500,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          TextSpan(
+            text: ' this week',
+            style: AppTypography.bodySmall.copyWith(
+              color: AppColors.secondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SpendingHeader extends StatelessWidget {
+  const SpendingHeader({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Spending Overview',
+          style: AppTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Get.to(TransactionHistoryView());
+          },
+          child: Row(
+            children: [
+              Text(
+                'More',
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.neutral.neutralColor600,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16,
+                color: AppColors.neutral.neutralColor600,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Header extends StatelessWidget {
+  const Header({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+            width: 24,
+            height: 24,
+            child: Image.asset(
+              "assets/images/picbudget logo primary.png",
+            )),
+        SizedBox(width: 16),
+        Text(
+          'Hi, PicPlanners ✋',
+          style: AppTypography.titleLarge.copyWith(
+            fontWeight: FontWeight.bold,
           ),
         ),
       ],
@@ -247,11 +292,9 @@ class SpendingOverview extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            // Stacked Bar Chart with Gaps
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Bar with Gaps
                 SizedBox(
                   height: 24,
                   width: double.infinity,
@@ -271,7 +314,6 @@ class SpendingOverview extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8),
-                // Category Legend
                 Column(
                   children: spendingData.map((data) {
                     return Padding(
@@ -283,14 +325,6 @@ class SpendingOverview extends StatelessWidget {
                             backgroundColor: _hexToColor(data['color']),
                           ),
                           SizedBox(width: 8),
-                          // Expanded(
-                          //   child: Text(
-                          //     data['category'],
-                          //     style: AppTypography.labelMedium.copyWith(
-                          //       color: AppColors.secondary,
-                          //     ),
-                          //   ),
-                          // ),
                           Expanded(
                             child: Text(
                               "${data['category']}",

@@ -67,4 +67,9 @@ class Transaction {
     final DateFormat formatter = DateFormat('dd-MM-yyyy HH:mm');
     return formatter.format(transactionDate.toLocal());
   }
+
+  String getFormattedTime() {
+    final DateFormat formatter = DateFormat('HH:mm');
+    return formatter.format(transactionDate.toLocal());
+  }
 }
