@@ -124,15 +124,6 @@ class TransactionDetailController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  // void toggleLabelSelection(Label label) {
-  //   if (selectedLabels.contains(label)) {
-  //     selectedLabels.remove(label);
-  //   } else {
-  //     selectedLabels.add(label);
-  //   }
-  // }
-
   Future<void> toggleLabelSelection(Label label) async {
     if (selectedLabels.contains(label)) {
       selectedLabels.remove(label);
