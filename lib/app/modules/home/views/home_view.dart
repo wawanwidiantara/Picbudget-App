@@ -106,7 +106,9 @@ class HomeView extends GetView<HomeController> {
         _buildCircularButton(
           icon: Icons.track_changes_rounded,
           label: 'PicPlan',
-          onTap: () {},
+          onTap: () {
+            Get.toNamed(Routes.PICPLAN);
+          },
         ),
         _buildCircularButton(
           icon: Icons.bar_chart,

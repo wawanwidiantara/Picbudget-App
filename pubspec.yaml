@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   dartz: ^0.10.1
   equatable: ^2.0.5
+  fl_chart: ^0.69.2
   flutter:
     sdk: flutter
   flutter_image_compress: ^2.3.0
