@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
 import 'package:picbudget_app/app/modules/picplan/views/create_picplan_view.dart';
 import 'package:picbudget_app/app/modules/picplan/views/picplan_detail_view.dart';
-import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
 import '../controllers/picplan_controller.dart';
 
 class PicplanView extends GetView<PicplanController> {
@@ -94,8 +92,6 @@ class ListPlan extends StatelessWidget {
       itemCount: controller.plans.length,
       itemBuilder: (context, index) {
         final plan = controller.plans[index];
-        final progress = 50;
-
         return Container(
           margin: EdgeInsets.only(bottom: 16),
           padding: EdgeInsets.all(16),

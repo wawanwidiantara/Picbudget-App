@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:picbudget_app/app/core/components/snackbar.dart';
 import 'package:picbudget_app/app/core/constants/url.dart';
+import 'package:picbudget_app/app/core/services/auth_services.dart';
 import 'package:picbudget_app/app/modules/auth/views/register_success_view.dart';
 
 class OtpController extends GetxController {
@@ -13,9 +14,12 @@ class OtpController extends GetxController {
   final TextEditingController otpController = TextEditingController();
 
   final countdown = 30.obs;
-  Timer? timer;
+  final isLoading = false.obs;
 
+  Timer? timer;
   final argument = Get.arguments;
+
+  final AuthService authService = AuthService();
 
   @override
   void onInit() {
@@ -51,8 +55,8 @@ class OtpController extends GetxController {
       return;
     }
 
+    isLoading.value = true;
     try {
-      // Make POST request to resend OTP API
       final response = await http.post(
         Uri.parse('${UrlApi.baseAPI}/api/auth/resend-otp/'),
         headers: {'Content-Type': 'application/json'},
@@ -60,15 +64,13 @@ class OtpController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // Handle success response
         SnackBarWidget.showSnackBar(
           'Success',
           'OTP has been resent to your email.',
           'success',
         );
-        startCountdown(); // Restart the countdown
+        startCountdown();
       } else {
-        // Handle error response
         final errorData = jsonDecode(response.body);
         SnackBarWidget.showSnackBar(
           'Error',
@@ -77,12 +79,13 @@ class OtpController extends GetxController {
         );
       }
     } catch (e) {
-      // Handle network or unexpected errors
       SnackBarWidget.showSnackBar(
         'Error',
         'Something went wrong. Please try again later.',
         'err',
       );
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -90,8 +93,8 @@ class OtpController extends GetxController {
     if (formKey.currentState!.validate()) {
       final String otpCode = otpController.text.trim();
 
+      isLoading.value = true;
       try {
-        // Verify OTP
         final response = await http.post(
           Uri.parse('${UrlApi.baseAPI}/api/auth/verify-otp/'),
           headers: {'Content-Type': 'application/json'},
@@ -102,7 +105,6 @@ class OtpController extends GetxController {
         );
 
         if (response.statusCode == 200) {
-          // If OTP verification succeeds, log in the user
           final loginResponse = await http.post(
             Uri.parse('${UrlApi.baseAPI}/api/auth/login/'),
             headers: {'Content-Type': 'application/json'},
@@ -115,9 +117,7 @@ class OtpController extends GetxController {
           if (loginResponse.statusCode == 200) {
             final data = jsonDecode(loginResponse.body);
 
-            // Save tokens and user data (assuming you have a storage mechanism)
-            GetStorage().write('refresh', data['refresh']);
-            GetStorage().write('access', data['access']);
+            await authService.saveTokens(data['access'], data['refresh']);
             GetStorage().write('user', data['data']);
 
             SnackBarWidget.showSnackBar(
@@ -126,7 +126,6 @@ class OtpController extends GetxController {
               'success',
             );
 
-            // Navigate to the success page
             Get.offAll(() => RegisterSuccessView());
           } else {
             SnackBarWidget.showSnackBar(
@@ -136,7 +135,6 @@ class OtpController extends GetxController {
             );
           }
         } else {
-          // OTP verification failed
           final errorData = jsonDecode(response.body);
           SnackBarWidget.showSnackBar(
             'Verification Failed',
@@ -150,6 +148,8 @@ class OtpController extends GetxController {
           'Something went wrong. Please try again later.',
           'err',
         );
+      } finally {
+        isLoading.value = false;
       }
     }
   }

@@ -35,8 +35,8 @@ class ExtractReceiptController extends GetxController {
   }
 
   Future<void> getReceiptImage(ImageSource imageSource, String walletId) async {
-    final ImagePicker _picker = ImagePicker();
-    final pickedFile = await _picker.pickImage(source: imageSource);
+    final ImagePicker picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: imageSource);
 
     if (pickedFile != null) {
       Get.to(arguments: nerResult, () => const PicScanView());

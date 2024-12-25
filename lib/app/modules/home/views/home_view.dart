@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
-import 'package:picbudget_app/app/data/models/wallet.dart';
 import 'package:picbudget_app/app/modules/transaction/views/transaction_history_view.dart';
 import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
 import 'package:picbudget_app/app/routes/app_pages.dart';
