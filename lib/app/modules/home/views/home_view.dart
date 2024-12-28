@@ -112,7 +112,9 @@ class HomeView extends GetView<HomeController> {
         _buildCircularButton(
           icon: Icons.bar_chart,
           label: 'Report',
-          onTap: () {},
+          onTap: () {
+            Get.toNamed(Routes.REPORT);
+          },
         ),
         _buildCircularButton(
           icon: Icons.keyboard_voice_rounded,

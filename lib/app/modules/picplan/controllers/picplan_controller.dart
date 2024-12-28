@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:picbudget_app/app/core/components/snackbar.dart';
 import 'package:picbudget_app/app/core/constants/url.dart';
 import 'package:picbudget_app/app/data/models/plan.dart';
 import 'package:http/http.dart' as http;
@@ -46,7 +47,6 @@ class PicplanController extends GetxController {
         final List<dynamic> planData = jsonResponse['data'];
         plans.value =
             planData.map((planJson) => Plan.fromJson(planJson)).toList();
-        // print(plans[0].progress);
       } else {
         print("Error fetching plans: ${response.statusCode}");
       }
@@ -72,7 +72,7 @@ class PicplanController extends GetxController {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         selectedPlan.value = Plan.fromJson(jsonResponse['data']);
-        print(selectedPlan.value.period);
+        update();
       } else {
         print("Error fetching plan detail: ${response.statusCode}");
       }

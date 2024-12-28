@@ -56,13 +56,7 @@ class PicplanView extends GetView<PicplanController> {
                                   ),
                                 ),
                               )
-                            : GestureDetector(
-                                onTap: () {
-                                  Get.to(() => PicplanDetailView(),
-                                      arguments: controller.plans[0].id);
-                                },
-                                child: ListPlan(controller: controller),
-                              ),
+                            : ListPlan(controller: controller),
                       ),
                     ],
                   ),
@@ -92,53 +86,58 @@ class ListPlan extends StatelessWidget {
       itemCount: controller.plans.length,
       itemBuilder: (context, index) {
         final plan = controller.plans[index];
-        return Container(
-          margin: EdgeInsets.only(bottom: 16),
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: AppColors.neutral.neutralColor600,
-              width: 1,
+        return GestureDetector(
+          onTap: () {
+            Get.to(() => PicplanDetailView(), arguments: plan.id);
+          },
+          child: Container(
+            margin: EdgeInsets.only(bottom: 16),
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: AppColors.neutral.neutralColor600,
+                width: 1,
+              ),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    plan.name ?? '',
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        plan.amount.toString(),
-                        style: AppTypography.bodyMedium.copyWith(
-                          color: AppColors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      plan.name ?? '',
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.black,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 12),
-              LinearProgressIndicator(
-                value: plan.progress! / 100,
-                backgroundColor: AppColors.neutral.neutralColor300,
-                valueColor: AlwaysStoppedAnimation(AppColors.primary),
-                minHeight: 12,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              SizedBox(height: 8),
-            ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          plan.remaining.toString(),
+                          style: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                LinearProgressIndicator(
+                  value: plan.progress! / 100,
+                  backgroundColor: AppColors.neutral.neutralColor300,
+                  valueColor: AlwaysStoppedAnimation(AppColors.primary),
+                  minHeight: 12,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                SizedBox(height: 8),
+              ],
+            ),
           ),
         );
       },

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,7 @@ class HomeController extends GetxController {
   Future<void> fetchSpendingData() async {
     try {
       final token = storage.read('access');
-      var url = Uri.parse("${UrlApi.baseAPI}/api/transactions/summary/labels");
+      var url = Uri.parse("${UrlApi.baseAPI}/api/transactions/summary/labels/");
 
       final response = await http.get(
         url,
