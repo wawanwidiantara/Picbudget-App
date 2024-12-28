@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:picbudget_app/app/core/components/forms.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
@@ -49,10 +50,8 @@ class OtpView extends GetView<OtpController> {
                   controller: controller.otpController,
                   onChanged: (value) {
                     if (value.length == 6) {
-                      // Automatically submit when 6 characters are entered
-                      FocusScope.of(context).unfocus(); // Close the keyboard
-                      controller
-                          .verifyOtp(); // Call the controller's OTP submission method
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      controller.verifyOtp();
                     }
                   },
                   validator: (value) {
@@ -64,36 +63,46 @@ class OtpView extends GetView<OtpController> {
                 ),
                 SizedBox(height: 24),
                 Obx(() {
-                  if (controller.countdown.value > 0) {
-                    return Text(
-                      'Please wait ${controller.countdown.value} seconds to resend',
-                      style: AppTypography.bodyMedium,
+                  if (controller.isLoading.value) {
+                    return Center(
+                      child: LoadingAnimationWidget.flickr(
+                        leftDotColor: AppColors.primary,
+                        rightDotColor: AppColors.secondary,
+                        size: 20,
+                      ),
                     );
                   } else {
-                    return Center(
-                      child: Text.rich(
-                        TextSpan(
-                          text: "Didn't receive the code? ",
-                          style: AppTypography.bodyMedium,
-                          children: <InlineSpan>[
-                            WidgetSpan(
-                              alignment: PlaceholderAlignment.baseline,
-                              baseline: TextBaseline.alphabetic,
-                              child: GestureDetector(
-                                onTap: controller.resendOTP,
-                                child: Text(
-                                  'Resend',
-                                  style: AppTypography.bodyMedium.copyWith(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.bold,
+                    if (controller.countdown.value > 0) {
+                      return Text(
+                        'Please wait ${controller.countdown.value} seconds to resend',
+                        style: AppTypography.bodyMedium,
+                      );
+                    } else {
+                      return Center(
+                        child: Text.rich(
+                          TextSpan(
+                            text: "Didn't receive the code? ",
+                            style: AppTypography.bodyMedium,
+                            children: <InlineSpan>[
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.baseline,
+                                baseline: TextBaseline.alphabetic,
+                                child: GestureDetector(
+                                  onTap: controller.resendOTP,
+                                  child: Text(
+                                    'Resend',
+                                    style: AppTypography.bodyMedium.copyWith(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   }
                 }),
               ],

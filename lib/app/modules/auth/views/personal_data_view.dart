@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:picbudget_app/app/core/components/buttons.dart';
 import 'package:picbudget_app/app/core/components/forms.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
@@ -52,191 +53,197 @@ class PersonalDataView extends GetView<PersonalDataController> {
 
   Form _formData(PersonalDataController controller, BuildContext context) {
     return Form(
-                    key: controller.formKey,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FormWidget(
-                            controller: controller.fullnameController,
-                            label: "Fullname",
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Fullname is required';
-                              }
-                              return null;
-                            },
-                            isObsecured: false,
-                            keyboardType: TextInputType.text,
-                            hintText: "Enter your fullname",
-                            onChanged: (value) {},
-                          ),
-                          SizedBox(height: 24),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Gender", style: AppTypography.titleSmall),
-                              SizedBox(height: 8),
-                              DropdownButtonFormField(
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Gender is required';
-                                  }
-                                  return null;
-                                },
-                                dropdownColor: AppColors.white,
-                                hint: Text(
-                                  "Select your gender",
-                                  style: AppTypography.bodyMedium.copyWith(
-                                      color:
-                                          AppColors.neutral.neutralColor700),
-                                ),
-                                items: [
-                                  DropdownMenuItem(
-                                    value: "male",
-                                    child: Text(
-                                      "Male",
-                                      style: AppTypography.bodyMedium
-                                          .copyWith(color: AppColors.black),
-                                    ),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: "female",
-                                    child: Text(
-                                      "Female",
-                                      style: AppTypography.bodyMedium
-                                          .copyWith(color: AppColors.black),
-                                    ),
-                                  ),
-                                ],
-                                onChanged: (value) {
-                                  controller.genderController.text =
-                                      value.toString();
-                                },
-                                decoration: dropDownFormStyle(),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 24),
-                          FormWidget(
-                            controller: controller.ageController,
-                            label: "Age",
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Age is required';
-                              }
-                              return null;
-                            },
-                            isObsecured: false,
-                            keyboardType: TextInputType.number,
-                            hintText: "Enter your age",
-                            onChanged: (value) {},
-                          ),
-                          SizedBox(height: 24),
-                          FormWidget(
-                            controller: controller.phoneController,
-                            label: "Phone number",
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Phone number is required';
-                              }
-                              return null;
-                            },
-                            isObsecured: false,
-                            keyboardType: TextInputType.phone,
-                            hintText: "Enter your phone number",
-                            onChanged: (value) {},
-                          ),
-                          SizedBox(height: 12),
-                          // checkboxes
-                          Row(
-                            children: [
-                              Obx(() {
-                                return Checkbox(
-                                  value: controller.isAgree.value,
-                                  onChanged: (value) {
-                                    controller.isAgree.value = value!;
-                                  },
-                                  splashRadius: 1,
-                                  checkColor: AppColors.secondary,
-                                  fillColor: WidgetStateProperty.all(
-                                      AppColors.white),
-                                  activeColor: AppColors.secondary,
-                                  focusColor: AppColors.secondary,
-                                  overlayColor: WidgetStateProperty.all(
-                                    AppColors.secondary,
-                                  ),
-                                  hoverColor: AppColors.secondary,
-                                );
-                              }),
-                              Text.rich(
-                                TextSpan(
-                                  text: "I agree to the ",
-                                  style: AppTypography.bodyMedium,
-                                  children: <InlineSpan>[
-                                    WidgetSpan(
-                                      alignment:
-                                          PlaceholderAlignment.baseline,
-                                      baseline: TextBaseline.alphabetic,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          termCondition(context);
-                                        },
-                                        child: Text(
-                                          'Terms and Conditions',
-                                          style: AppTypography.bodyMedium
-                                              .copyWith(
-                                            color: AppColors.secondary,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 24),
-                          Button(
-                            label: "Save My Details",
-                            type: ButtonType.secondary,
-                            onPressed: () {
-                              controller.saveProfile();
-                            },
-                          ),
-                          SizedBox(height: 24),
-                          Center(
-                            child: Text.rich(
-                              TextSpan(
-                                text: "Don't want to fill this now? ",
-                                style: AppTypography.bodyMedium,
-                                children: <InlineSpan>[
-                                  WidgetSpan(
-                                    alignment: PlaceholderAlignment.baseline,
-                                    baseline: TextBaseline.alphabetic,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Get.offAllNamed(Routes.NAVBAR);
-                                      },
-                                      child: Text(
-                                        'Skip for now',
-                                        style:
-                                            AppTypography.bodyMedium.copyWith(
-                                          color: AppColors.secondary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ]
-                        // TextFormField(
-                        //   decoration: InputDecoration(
+      key: controller.formKey,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        FormWidget(
+          controller: controller.fullnameController,
+          label: "Fullname",
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Fullname is required';
+            }
+            return null;
+          },
+          isObsecured: false,
+          keyboardType: TextInputType.text,
+          hintText: "Enter your fullname",
+          onChanged: (value) {},
+        ),
+        SizedBox(height: 24),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Gender", style: AppTypography.titleSmall),
+            SizedBox(height: 8),
+            DropdownButtonFormField(
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Gender is required';
+                }
+                return null;
+              },
+              dropdownColor: AppColors.white,
+              hint: Text(
+                "Select your gender",
+                style: AppTypography.bodyMedium
+                    .copyWith(color: AppColors.neutral.neutralColor700),
+              ),
+              items: [
+                DropdownMenuItem(
+                  value: "male",
+                  child: Text(
+                    "Male",
+                    style: AppTypography.bodyMedium
+                        .copyWith(color: AppColors.black),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: "female",
+                  child: Text(
+                    "Female",
+                    style: AppTypography.bodyMedium
+                        .copyWith(color: AppColors.black),
+                  ),
+                ),
+              ],
+              onChanged: (value) {
+                controller.genderController.text = value.toString();
+              },
+              decoration: dropDownFormStyle(),
+            ),
+          ],
+        ),
+        SizedBox(height: 24),
+        FormWidget(
+          controller: controller.ageController,
+          label: "Age",
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Age is required';
+            }
+            return null;
+          },
+          isObsecured: false,
+          keyboardType: TextInputType.number,
+          hintText: "Enter your age",
+          onChanged: (value) {},
+        ),
+        SizedBox(height: 24),
+        FormWidget(
+          controller: controller.phoneController,
+          label: "Phone number",
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Phone number is required';
+            }
+            return null;
+          },
+          isObsecured: false,
+          keyboardType: TextInputType.phone,
+          hintText: "Enter your phone number",
+          onChanged: (value) {},
+        ),
+        SizedBox(height: 12),
+        // checkboxes
+        Row(
+          children: [
+            Obx(() {
+              return Checkbox(
+                value: controller.isAgree.value,
+                onChanged: (value) {
+                  controller.isAgree.value = value!;
+                },
+                splashRadius: 1,
+                checkColor: AppColors.secondary,
+                fillColor: WidgetStateProperty.all(AppColors.white),
+                activeColor: AppColors.secondary,
+                focusColor: AppColors.secondary,
+                overlayColor: WidgetStateProperty.all(
+                  AppColors.secondary,
+                ),
+                hoverColor: AppColors.secondary,
+              );
+            }),
+            Text.rich(
+              TextSpan(
+                text: "I agree to the ",
+                style: AppTypography.bodyMedium,
+                children: <InlineSpan>[
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.baseline,
+                    baseline: TextBaseline.alphabetic,
+                    child: GestureDetector(
+                      onTap: () {
+                        termCondition(context);
+                      },
+                      child: Text(
+                        'Terms and Conditions',
+                        style: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.secondary,
+                          fontWeight: FontWeight.bold,
                         ),
-                  );
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 24),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return Center(
+              child: LoadingAnimationWidget.flickr(
+                leftDotColor: AppColors.primary,
+                rightDotColor: AppColors.secondary,
+                size: 20,
+              ),
+            );
+          } else {
+            return Button(
+              label: "Save My Details",
+              type: ButtonType.secondary,
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                controller.saveProfile();
+              },
+            );
+          }
+        }),
+
+        SizedBox(height: 24),
+        Center(
+          child: Text.rich(
+            TextSpan(
+              text: "Don't want to fill this now? ",
+              style: AppTypography.bodyMedium,
+              children: <InlineSpan>[
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.baseline,
+                  baseline: TextBaseline.alphabetic,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.offAllNamed(Routes.NAVBAR);
+                    },
+                    child: Text(
+                      'Skip for now',
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.secondary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ]
+          // TextFormField(
+          //   decoration: InputDecoration(
+          ),
+    );
   }
 
   Future<dynamic> termCondition(BuildContext context) {

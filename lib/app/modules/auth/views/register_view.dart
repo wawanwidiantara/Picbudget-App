@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:picbudget_app/app/core/components/buttons.dart';
 import 'package:picbudget_app/app/core/components/forms.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
@@ -118,11 +119,24 @@ class RegisterView extends GetView<RegisterController> {
                       return null;
                     }),
                 SizedBox(height: 24),
-                Button(
-                    onPressed: () {
-                      controller.register();
-                    },
-                    label: 'Register'),
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return Center(
+                      child: LoadingAnimationWidget.flickr(
+                        leftDotColor: AppColors.primary,
+                        rightDotColor: AppColors.secondary,
+                        size: 20,
+                      ),
+                    );
+                  } else {
+                    return Button(
+                        onPressed: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          controller.register();
+                        },
+                        label: 'Register');
+                  }
+                }),
                 SizedBox(height: 24),
                 Center(
                   child: Text.rich(

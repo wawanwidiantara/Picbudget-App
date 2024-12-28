@@ -18,6 +18,8 @@ import '../modules/picvoice/bindings/picvoice_binding.dart';
 import '../modules/picvoice/views/picvoice_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/report/bindings/report_binding.dart';
+import '../modules/report/views/report_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/transaction/bindings/transaction_binding.dart';
@@ -92,6 +94,11 @@ class AppPages {
       name: _Paths.PIC_SCAN,
       page: () => const PicScanView(),
       binding: PicScanBinding(),
+    ),
+    GetPage(
+      name: _Paths.REPORT,
+      page: () => const ReportView(),
+      binding: ReportBinding(),
     ),
   ];
 }

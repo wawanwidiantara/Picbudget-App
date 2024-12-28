@@ -15,6 +15,7 @@ class RegisterController extends GetxController {
       TextEditingController();
 
   final passwordStrength = 0.obs;
+  final isLoading = false.obs; // Add loading state
 
   @override
   void onInit() {
@@ -54,6 +55,7 @@ class RegisterController extends GetxController {
         return;
       }
 
+      isLoading.value = true; // Start loading
       try {
         final response = await http.post(
           Uri.parse('${UrlApi.baseAPI}/api/auth/register/'),
@@ -93,6 +95,8 @@ class RegisterController extends GetxController {
           'Something went wrong. Please try again later.',
           'err',
         );
+      } finally {
+        isLoading.value = false; // End loading
       }
     }
   }

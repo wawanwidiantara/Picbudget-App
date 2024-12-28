@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
-import 'package:picbudget_app/app/data/models/wallet.dart';
 import 'package:picbudget_app/app/modules/transaction/views/transaction_history_view.dart';
 import 'package:picbudget_app/app/modules/wallet/controllers/wallet_controller.dart';
 import 'package:picbudget_app/app/routes/app_pages.dart';
@@ -106,12 +105,16 @@ class HomeView extends GetView<HomeController> {
         _buildCircularButton(
           icon: Icons.track_changes_rounded,
           label: 'PicPlan',
-          onTap: () {},
+          onTap: () {
+            Get.toNamed(Routes.PICPLAN);
+          },
         ),
         _buildCircularButton(
           icon: Icons.bar_chart,
           label: 'Report',
-          onTap: () {},
+          onTap: () {
+            Get.toNamed(Routes.REPORT);
+          },
         ),
         _buildCircularButton(
           icon: Icons.keyboard_voice_rounded,
