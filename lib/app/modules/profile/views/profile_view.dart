@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:picbudget_app/app/core/components/buttons.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
@@ -68,7 +69,10 @@ class ProfileView extends GetView<ProfileController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Gede Widiantara',
+                                      // if user full_name = "" then show "User"
+                                      controller.user['full_name'] == ""
+                                          ? "PicBudget User"
+                                          : controller.user['full_name'],
                                       style:
                                           AppTypography.headlineSmall.copyWith(
                                         fontWeight: FontWeight.bold,
@@ -76,7 +80,10 @@ class ProfileView extends GetView<ProfileController> {
                                     ),
                                     SizedBox(height: 4),
                                     Text(
-                                      "gdwidi13@gmail.com",
+                                      controller.user['email'] == null ||
+                                              controller.user['email'] == ""
+                                          ? "No email"
+                                          : controller.user['email'],
                                       style: AppTypography.bodySmall.copyWith(),
                                     ),
                                   ],
@@ -115,13 +122,24 @@ class ProfileView extends GetView<ProfileController> {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Button(
-          label: "Logout",
-          type: ButtonType.secondary,
-          onPressed: () {
-            controller.logout();
-          },
-        ),
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return LoadingAnimationWidget.flickr(
+              leftDotColor: AppColors.primary,
+              rightDotColor: AppColors.secondary,
+              size: 20,
+            );
+          } else {
+            return Button(
+              type: ButtonType.secondary,
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                controller.logout();
+              },
+              label: 'Logout',
+            );
+          }
+        }),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

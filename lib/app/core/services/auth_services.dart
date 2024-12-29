@@ -11,16 +11,32 @@ class AuthService {
   Future<bool> checkAuthState() async {
     String? accessToken = storage.read('access');
     String? refreshToken = storage.read('refresh');
+    final user = storage.read('user');
+    final userId = user?['id'];
+
+    try {
+      if (userId == null) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
 
     if (accessToken != null && !JwtDecoder.isExpired(accessToken)) {
-      return true;
+      final isValid = await _verifyToken(accessToken, userId);
+      if (isValid) {
+        return true;
+      } else {
+        return refreshToken != null &&
+            await _refreshAccessToken(refreshToken, userId);
+      }
     } else if (refreshToken != null && !JwtDecoder.isExpired(refreshToken)) {
-      return await _refreshAccessToken(refreshToken);
+      return await _refreshAccessToken(refreshToken, userId);
     }
     return false;
   }
 
-  Future<bool> _refreshAccessToken(String refreshToken) async {
+  Future<bool> _refreshAccessToken(String refreshToken, String userId) async {
     try {
       final response = await http.post(
         Uri.parse('${UrlApi.baseAPI}/api/auth/login/refresh/'),
@@ -33,7 +49,13 @@ class AuthService {
         final newRefreshToken = data['refresh'];
         storage.write('access', newAccessToken);
         storage.write('refresh', newRefreshToken);
-        return true;
+        final isValid = await _verifyToken(newAccessToken, userId);
+        if (isValid) {
+          return true;
+        } else {
+          storage.erase();
+          return false;
+        }
       } else {
         storage.erase();
         return false;
@@ -46,5 +68,20 @@ class AuthService {
   Future<void> saveTokens(String accessToken, String refreshToken) async {
     await storage.write('access', accessToken);
     await storage.write('refresh', refreshToken);
+  }
+
+  Future<bool> _verifyToken(String accessToken, String userId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${UrlApi.baseAPI}/api/account/verify/$userId/'),
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
 }
