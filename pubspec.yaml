@@ -20,6 +20,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.2
   flutter_native_splash: ^2.4.3
   flutter_riverpod: ^2.6.1
+  flutter_slidable: ^3.1.2
   flutter_svg: ^2.0.16
   get: ^4.6.6
   get_storage: ^2.1.1

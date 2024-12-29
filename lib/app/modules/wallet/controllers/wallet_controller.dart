@@ -133,6 +133,7 @@ class WalletController extends GetxController {
 
       if (response.statusCode == 204) {
         wallets.removeWhere((wallet) => wallet.id == id);
+        update();
       } else {}
     } catch (e) {}
   }

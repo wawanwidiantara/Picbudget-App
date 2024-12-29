@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
 
-enum ButtonType { primary, secondary, tertiary }
+enum ButtonType { primary, secondary, tertiary, danger }
 
 enum ButtonState { enabled, disabled, loading }
 
@@ -49,6 +49,19 @@ class Button extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           elevation: 0, // Remove shadow
+        );
+        break;
+      case ButtonType.danger:
+        backgroundColor = state == ButtonState.enabled
+            ? AppColors.error.errorColor500
+            : AppColors.error.errorColor500;
+        textStyle = AppTypography.bodyMedium.copyWith(
+          color: AppColors.white,
+          fontWeight: FontWeight.bold,
+        );
+        buttonStyle = ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         );
         break;
       case ButtonType.secondary:

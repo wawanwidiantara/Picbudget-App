@@ -11,32 +11,25 @@ class AuthService {
   Future<bool> checkAuthState() async {
     String? accessToken = storage.read('access');
     String? refreshToken = storage.read('refresh');
-    final user = storage.read('user');
-    final userId = user?['id'];
-
+    String? userID = storage.read('user')['id'];
+    var isValid = false;
     try {
-      if (userId == null) {
-        return false;
-      }
+      isValid = await _verifyUser(accessToken!, userID!);
     } catch (e) {
-      return false;
+      isValid = false;
     }
 
-    if (accessToken != null && !JwtDecoder.isExpired(accessToken)) {
-      final isValid = await _verifyToken(accessToken, userId);
-      if (isValid) {
-        return true;
-      } else {
-        return refreshToken != null &&
-            await _refreshAccessToken(refreshToken, userId);
-      }
-    } else if (refreshToken != null && !JwtDecoder.isExpired(refreshToken)) {
-      return await _refreshAccessToken(refreshToken, userId);
+    if (accessToken != null && !JwtDecoder.isExpired(accessToken) && isValid) {
+      return true;
+    } else if (refreshToken != null &&
+        !JwtDecoder.isExpired(refreshToken) &&
+        isValid) {
+      return await _refreshAccessToken(refreshToken);
     }
     return false;
   }
 
-  Future<bool> _refreshAccessToken(String refreshToken, String userId) async {
+  Future<bool> _refreshAccessToken(String refreshToken) async {
     try {
       final response = await http.post(
         Uri.parse('${UrlApi.baseAPI}/api/auth/login/refresh/'),
@@ -45,22 +38,14 @@ class AuthService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final newAccessToken = data['access'];
-        final newRefreshToken = data['refresh'];
-        storage.write('access', newAccessToken);
-        storage.write('refresh', newRefreshToken);
-        final isValid = await _verifyToken(newAccessToken, userId);
-        if (isValid) {
-          return true;
-        } else {
-          storage.erase();
-          return false;
-        }
+        saveTokens(data['access'], data['refresh']);
+        return true;
       } else {
         storage.erase();
         return false;
       }
     } catch (e) {
+      storage.erase();
       return false;
     }
   }
@@ -70,12 +55,14 @@ class AuthService {
     await storage.write('refresh', refreshToken);
   }
 
-  Future<bool> _verifyToken(String accessToken, String userId) async {
+  Future<bool> _verifyUser(String accessToken, String userID) async {
+    final url = '${UrlApi.baseAPI}/api/account/$userID/';
     try {
-      final response = await http.post(
-        Uri.parse('${UrlApi.baseAPI}/api/account/verify/$userId/'),
+      final response = await http.get(
+        Uri.parse(url),
         headers: {'Authorization': 'Bearer $accessToken'},
       );
+
       if (response.statusCode == 200) {
         return true;
       }
