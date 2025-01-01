@@ -41,7 +41,6 @@ class CreateWalletController extends GetxController {
         SnackBarWidget.showSnackBar(
             'Wallet Created', 'Your wallet has been created', 'success');
       } else {
-        Get.back();
         SnackBarWidget.showSnackBar(
             'Failed to Create Wallet', 'Please try again', 'err');
       }
