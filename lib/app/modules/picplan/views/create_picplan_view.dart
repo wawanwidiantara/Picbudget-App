@@ -92,59 +92,65 @@ class CreatePicplanView extends GetView {
                           children: [
                             Text("Period", style: AppTypography.titleSmall),
                             SizedBox(height: 8),
-                            DropdownButtonFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please select your plan period';
-                                }
-                                return null;
-                              },
-                              dropdownColor: AppColors.white,
-                              hint: Text(
-                                "Select your plan period",
-                                style: AppTypography.bodyMedium.copyWith(
-                                    color: AppColors.neutral.neutralColor700),
-                              ),
-                              items: [
-                                DropdownMenuItem(
-                                  value: "one-time",
-                                  child: Text(
-                                    "One-time",
-                                    style: AppTypography.bodyMedium
-                                        .copyWith(color: AppColors.black),
-                                  ),
+                            Obx(() {
+                              return DropdownButtonFormField(
+                                value:
+                                    controller.selectedPeriod.value.isNotEmpty
+                                        ? controller.selectedPeriod.value
+                                        : null, // Bind reactive variable
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please select your plan period';
+                                  }
+                                  return null;
+                                },
+                                dropdownColor: AppColors.white,
+                                hint: Text(
+                                  "Select your plan period",
+                                  style: AppTypography.bodyMedium.copyWith(
+                                      color: AppColors.neutral.neutralColor700),
                                 ),
-                                DropdownMenuItem(
-                                  value: "weekly",
-                                  child: Text(
-                                    "Weekly",
-                                    style: AppTypography.bodyMedium
-                                        .copyWith(color: AppColors.black),
+                                items: [
+                                  DropdownMenuItem(
+                                    value: "one-time",
+                                    child: Text(
+                                      "One-time",
+                                      style: AppTypography.bodyMedium
+                                          .copyWith(color: AppColors.black),
+                                    ),
                                   ),
-                                ),
-                                DropdownMenuItem(
-                                  value: "monthly",
-                                  child: Text(
-                                    "Monthly",
-                                    style: AppTypography.bodyMedium
-                                        .copyWith(color: AppColors.black),
+                                  DropdownMenuItem(
+                                    value: "weekly",
+                                    child: Text(
+                                      "Weekly",
+                                      style: AppTypography.bodyMedium
+                                          .copyWith(color: AppColors.black),
+                                    ),
                                   ),
-                                ),
-                                DropdownMenuItem(
-                                  value: "yearly",
-                                  child: Text(
-                                    "Yearly",
-                                    style: AppTypography.bodyMedium
-                                        .copyWith(color: AppColors.black),
+                                  DropdownMenuItem(
+                                    value: "monthly",
+                                    child: Text(
+                                      "Monthly",
+                                      style: AppTypography.bodyMedium
+                                          .copyWith(color: AppColors.black),
+                                    ),
                                   ),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                controller.periodController.text =
-                                    value.toString();
-                              },
-                              decoration: dropDownFormStyle(),
-                            ),
+                                  DropdownMenuItem(
+                                    value: "yearly",
+                                    child: Text(
+                                      "Yearly",
+                                      style: AppTypography.bodyMedium
+                                          .copyWith(color: AppColors.black),
+                                    ),
+                                  ),
+                                ],
+                                onChanged: (value) {
+                                  controller.selectedPeriod.value =
+                                      value.toString();
+                                },
+                                decoration: dropDownFormStyle(),
+                              );
+                            }),
                           ],
                         ),
                         SizedBox(height: 24),
@@ -276,10 +282,12 @@ class CreatePicplanView extends GetView {
                             );
                           } else {
                             return Button(
-                              label: "Create Wallet",
+                              label: controller.isEditMode.value
+                                  ? "Update Plan"
+                                  : "Create Plan",
                               onPressed: () {
                                 FocusManager.instance.primaryFocus?.unfocus();
-                                controller.createPlan();
+                                controller.createOrUpdatePlan();
                               },
                             );
                           }

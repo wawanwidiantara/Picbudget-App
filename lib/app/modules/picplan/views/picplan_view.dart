@@ -89,6 +89,32 @@ class ListPlan extends StatelessWidget {
       itemBuilder: (context, index) {
         final plan = controller.plans[index];
         return Slidable(
+          startActionPane: ActionPane(
+            extentRatio: 0.25,
+            motion: ScrollMotion(),
+            children: [
+              Builder(
+                builder: (cont) {
+                  return Expanded(
+                      child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => CreatePicplanView(), arguments: plan.id);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      backgroundColor: AppColors.secondary,
+                      padding: EdgeInsets.all(10),
+                    ),
+                    child: Icon(
+                      Icons.edit,
+                      color: AppColors.white,
+                      size: 24,
+                    ),
+                  ));
+                },
+              )
+            ],
+          ),
           endActionPane: ActionPane(
             extentRatio: 0.25,
             motion: ScrollMotion(),
