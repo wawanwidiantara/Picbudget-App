@@ -7,23 +7,24 @@ class SplashController extends GetxController {
 
   @override
   void onInit() {
+    _handleNavigation();
     super.onInit();
   }
 
   @override
   void onReady() {
-    super.onReady();
     _handleNavigation();
+    super.onReady();
   }
 
   Future<void> _handleNavigation() async {
     bool isAuthenticated = await _authService.checkAuthState();
-    
+
     Future.delayed(Duration(seconds: 3), () {
       if (isAuthenticated) {
-        Get.offAllNamed(Routes.NAVBAR); 
+        Get.offAllNamed(Routes.NAVBAR);
       } else {
-        Get.offAllNamed(Routes.ON_BOARDING); 
+        Get.offAllNamed(Routes.ON_BOARDING);
       }
     });
   }
