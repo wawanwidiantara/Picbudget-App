@@ -1,9 +1,0 @@
-{
-    "id": "12c047ed-1bdd-4ecd-9f18-138459359c9c",
-    "name": "My Wallet",
-    "type": "cash",
-    "balance": "0.00",
-    "created_at": "2024-11-27T01:32:03.742117+07:00",
-    "updated_at": "2024-11-27T01:32:03.742123+07:00",
-    "user": "d303f5af-e4d4-44cd-b846-78eb035cbb03"
-}
