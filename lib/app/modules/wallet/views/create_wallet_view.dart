@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:picbudget_app/app/core/components/buttons.dart';
 import 'package:picbudget_app/app/core/components/forms.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
@@ -67,12 +68,16 @@ class CreateWalletView extends GetView<CreateWalletController> {
                                     "assets/images/picbudget logo primary.png",
                                   )),
                               SizedBox(height: 24),
-                              Text(
-                                'Create Wallet',
-                                textAlign: TextAlign.center,
-                                style: AppTypography.titleLarge.copyWith(
-                                    height: 1.2, fontWeight: FontWeight.bold),
-                              ),
+                              Obx(() {
+                                return Text(
+                                  controller.isEditMode.value
+                                      ? 'Update Wallet'
+                                      : 'Create Wallet',
+                                  textAlign: TextAlign.center,
+                                  style: AppTypography.titleLarge.copyWith(
+                                      height: 1.2, fontWeight: FontWeight.bold),
+                                );
+                              }),
                             ],
                           ),
                         ),
@@ -97,50 +102,59 @@ class CreateWalletView extends GetView<CreateWalletController> {
                             Text("Wallet type",
                                 style: AppTypography.titleSmall),
                             SizedBox(height: 8),
-                            DropdownButtonFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please select your wallet type';
-                                }
-                                return null;
+                            Obx(
+                              () {
+                                return DropdownButtonFormField(
+                                  value:
+                                      controller.selectedType.value.isNotEmpty
+                                          ? controller.selectedType.value
+                                          : null, // Bind reactive variable
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please select your wallet type';
+                                    }
+                                    return null;
+                                  },
+                                  dropdownColor: AppColors.white,
+                                  hint: Text(
+                                    "Select your wallet type",
+                                    style: AppTypography.bodyMedium.copyWith(
+                                        color:
+                                            AppColors.neutral.neutralColor700),
+                                  ),
+                                  items: [
+                                    DropdownMenuItem(
+                                      value: "cash",
+                                      child: Text(
+                                        "Cash",
+                                        style: AppTypography.bodyMedium
+                                            .copyWith(color: AppColors.black),
+                                      ),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: "bank",
+                                      child: Text(
+                                        "Bank",
+                                        style: AppTypography.bodyMedium
+                                            .copyWith(color: AppColors.black),
+                                      ),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: "ewallet",
+                                      child: Text(
+                                        "E-Wallet",
+                                        style: AppTypography.bodyMedium
+                                            .copyWith(color: AppColors.black),
+                                      ),
+                                    ),
+                                  ],
+                                  onChanged: (value) {
+                                    controller.selectedType.value =
+                                        value.toString();
+                                  },
+                                  decoration: dropDownFormStyle(),
+                                );
                               },
-                              dropdownColor: AppColors.white,
-                              hint: Text(
-                                "Select your wallet type",
-                                style: AppTypography.bodyMedium.copyWith(
-                                    color: AppColors.neutral.neutralColor700),
-                              ),
-                              items: [
-                                DropdownMenuItem(
-                                  value: "cash",
-                                  child: Text(
-                                    "Cash",
-                                    style: AppTypography.bodyMedium
-                                        .copyWith(color: AppColors.black),
-                                  ),
-                                ),
-                                DropdownMenuItem(
-                                  value: "bank",
-                                  child: Text(
-                                    "Bank",
-                                    style: AppTypography.bodyMedium
-                                        .copyWith(color: AppColors.black),
-                                  ),
-                                ),
-                                DropdownMenuItem(
-                                  value: "ewallet",
-                                  child: Text(
-                                    "E-Wallet",
-                                    style: AppTypography.bodyMedium
-                                        .copyWith(color: AppColors.black),
-                                  ),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                controller.typeController.text =
-                                    value.toString();
-                              },
-                              decoration: dropDownFormStyle(),
                             ),
                           ],
                         ),
@@ -159,12 +173,27 @@ class CreateWalletView extends GetView<CreateWalletController> {
                               return null;
                             }),
                         SizedBox(height: 24),
-                        Button(
-                          label: "Create Wallet",
-                          onPressed: () {
-                            controller.createWallet();
-                          },
-                        ),
+                        Obx(() {
+                          if (controller.isLoading.value) {
+                            return Center(
+                              child: LoadingAnimationWidget.flickr(
+                                leftDotColor: AppColors.primary,
+                                rightDotColor: AppColors.secondary,
+                                size: 20,
+                              ),
+                            );
+                          } else {
+                            return Button(
+                              label: controller.isEditMode.value
+                                  ? "Update Wallet"
+                                  : "Create Wallet",
+                              onPressed: () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                controller.createOrUpdateWallet();
+                              },
+                            );
+                          }
+                        }),
                       ],
                     ),
                   ),

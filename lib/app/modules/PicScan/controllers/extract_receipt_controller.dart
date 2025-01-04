@@ -19,20 +19,8 @@ class ExtractReceiptController extends GetxController {
   var receipt = ''.obs;
   var nerResult = {}.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   Future<void> getReceiptImage(ImageSource imageSource, String walletId) async {
     final ImagePicker picker = ImagePicker();

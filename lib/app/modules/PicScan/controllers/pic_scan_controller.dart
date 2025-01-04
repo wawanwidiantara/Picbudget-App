@@ -8,20 +8,8 @@ class PicScanController extends GetxController {
   var nerResult = Get.arguments;
   RxBool transactionCreated = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   Future<void> confirmTransaction({
     required String transactionId,

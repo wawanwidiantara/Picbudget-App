@@ -23,14 +23,14 @@ class RegisterSuccessView extends GetView {
             SvgPicture.asset("assets/images/register-success.svg"),
             SizedBox(height: 24),
             Text(
-              'Enter Verification Code',
+              'Complete Your Profile',
               textAlign: TextAlign.center,
               style: AppTypography.titleLarge
                   .copyWith(height: 1.2, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 24),
             Text(
-              'The verification code has been sent via Email to\ngdwidi13@gmail.com',
+              'Add your personal details to get personalized financial insights with PicBudget.',
               textAlign: TextAlign.center,
               style: AppTypography.bodyMedium.copyWith(height: 1.2),
             ),

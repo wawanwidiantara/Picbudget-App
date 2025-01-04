@@ -41,7 +41,7 @@ class OtpView extends GetView<OtpController> {
                 ),
                 SizedBox(height: 24),
                 Text(
-                  'The verification code has been sent via Email to\ngdwidi13@gmail.com',
+                  'The verification code has been sent via Email to\n${controller.argument["email"]}',
                   textAlign: TextAlign.center,
                   style: AppTypography.bodyMedium.copyWith(height: 1.2),
                 ),

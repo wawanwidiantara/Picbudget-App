@@ -59,13 +59,28 @@ class TransactionController extends GetxController {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
         final List<dynamic> transactionData = jsonResponse['data'];
-
+        print("Transaction Data: $transactionData");
         transactions.value = transactionData
             .map((transactionJson) => Transaction.fromJson(transactionJson))
             .toList();
-      } else {}
-    } catch (e) {}
+        print("Transactions: $transactions");
+      } else {
+        SnackBarWidget.showSnackBar(
+          'Error',
+          'Failed to fetch transactions',
+          'err',
+        );
+      }
+    } catch (e) {
+      print(e);
+      SnackBarWidget.showSnackBar(
+        'Error',
+        'Failed to fetch transactions: $e',
+        'err',
+      );
+    }
   }
 
   Future<Transaction?> getTransactionDetails(String id) async {

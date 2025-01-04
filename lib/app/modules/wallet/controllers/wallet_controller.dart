@@ -9,6 +9,7 @@ class WalletController extends GetxController {
   var wallets = <Wallet>[].obs;
   var totalBalance = 0.0.obs;
   var walletCreated = false.obs;
+  var selectedWallet = {}.obs;
 
   @override
   void onInit() {
@@ -44,6 +45,32 @@ class WalletController extends GetxController {
       }
     } catch (e) {
       return;
+    }
+  }
+
+  Future<void> fetchWalletDetail(String walletId) async {
+    final storage = GetStorage();
+    final token = storage.read('access');
+    var url = Uri.parse("${UrlApi.baseAPI}/api/wallets/$walletId/");
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        selectedWallet.value = jsonResponse['data'];
+        update();
+      } else {
+        print("Error fetching wallet detail: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Exception while fetching wallet detail: $e");
     }
   }
 
@@ -90,7 +117,7 @@ class WalletController extends GetxController {
     var url = Uri.parse("${UrlApi.baseAPI}/api/wallets/$id/");
 
     try {
-      final response = await http.put(
+      final response = await http.patch(
         url,
         headers: {
           'Authorization': 'Bearer $token',
@@ -133,6 +160,7 @@ class WalletController extends GetxController {
 
       if (response.statusCode == 204) {
         wallets.removeWhere((wallet) => wallet.id == id);
+        update();
       } else {}
     } catch (e) {}
   }

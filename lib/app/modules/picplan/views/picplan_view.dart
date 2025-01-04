@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:get/get.dart';
+import 'package:picbudget_app/app/core/components/buttons.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
 import 'package:picbudget_app/app/modules/picplan/views/create_picplan_view.dart';
@@ -86,57 +88,177 @@ class ListPlan extends StatelessWidget {
       itemCount: controller.plans.length,
       itemBuilder: (context, index) {
         final plan = controller.plans[index];
-        return GestureDetector(
-          onTap: () {
-            Get.to(() => PicplanDetailView(), arguments: plan.id);
-          },
-          child: Container(
-            margin: EdgeInsets.only(bottom: 16),
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: AppColors.neutral.neutralColor600,
-                width: 1,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      plan.name ?? '',
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.black,
-                        fontWeight: FontWeight.bold,
+        return Slidable(
+          startActionPane: ActionPane(
+            extentRatio: 0.25,
+            motion: ScrollMotion(),
+            children: [
+              Builder(
+                builder: (cont) {
+                  return Expanded(
+                      child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => CreatePicplanView(), arguments: plan.id);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      backgroundColor: AppColors.secondary,
+                      padding: EdgeInsets.all(10),
+                    ),
+                    child: Icon(
+                      Icons.edit,
+                      color: AppColors.white,
+                      size: 24,
+                    ),
+                  ));
+                },
+              )
+            ],
+          ),
+          endActionPane: ActionPane(
+            extentRatio: 0.25,
+            motion: ScrollMotion(),
+            children: [
+              Builder(
+                builder: (cont) {
+                  return Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) => Dialog(
+                            backgroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(8), // Rounded corners
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Title
+                                  Text(
+                                    'Are you sure?',
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        AppTypography.headlineMedium.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  // Description
+                                  Text(
+                                    "Deleting this plan will remove it and all its plan history permanently. If you're sure, you can proceed—but remember, this action can't be undone!",
+                                    textAlign: TextAlign.center,
+                                    style: AppTypography.bodyLarge.copyWith(
+                                      height: 1.5,
+                                      color: AppColors.secondary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 24),
+                                  // Buttons
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Button(
+                                          type: ButtonType.tertiary,
+                                          onPressed: () {
+                                            Navigator.of(dialogContext).pop();
+                                          },
+                                          label: 'Not now',
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Button(
+                                          type: ButtonType.danger,
+                                          onPressed: () {
+                                            if (plan.id != null) {
+                                              controller.deletePlan(plan.id!);
+                                            }
+                                            Navigator.of(dialogContext).pop();
+                                          },
+                                          label: 'Delete',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        backgroundColor: AppColors.error.errorColor500,
+                        padding: EdgeInsets.all(10),
+                      ),
+                      child: Icon(
+                        Icons.delete,
+                        color: AppColors.white,
+                        size: 24,
                       ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          plan.remaining.toString(),
-                          style: AppTypography.bodyMedium.copyWith(
-                            color: AppColors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  );
+                },
+              ),
+            ],
+          ),
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => PicplanDetailView(), arguments: plan.id);
+            },
+            child: Container(
+              margin: EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: AppColors.neutral.neutralColor600,
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        plan.name ?? '',
+                        style: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.black,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12),
-                LinearProgressIndicator(
-                  value: plan.progress! / 100,
-                  backgroundColor: AppColors.neutral.neutralColor300,
-                  valueColor: AlwaysStoppedAnimation(AppColors.primary),
-                  minHeight: 12,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                SizedBox(height: 8),
-              ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            plan.remaining.toString(),
+                            style: AppTypography.bodyMedium.copyWith(
+                              color: AppColors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  LinearProgressIndicator(
+                    value: plan.progress! / 100,
+                    backgroundColor: AppColors.neutral.neutralColor300,
+                    valueColor: AlwaysStoppedAnimation(AppColors.primary),
+                    minHeight: 12,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              ),
             ),
           ),
         );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:get/get.dart';
+import 'package:picbudget_app/app/core/components/buttons.dart';
 import 'package:picbudget_app/app/core/constants/colors.dart';
 import 'package:picbudget_app/app/core/constants/text_styles.dart';
 import 'package:picbudget_app/app/modules/wallet/views/create_wallet_view.dart';
@@ -51,7 +53,9 @@ class WalletView extends GetView<WalletController> {
                       SizedBox(height: 24),
                       Obx(
                         () => controller.wallets.isEmpty
-                            ? Text("Empty")
+                            ? Center(
+                                child: Text("Empty"),
+                              )
                             : ListWallet(controller: controller),
                       ),
                     ],
@@ -81,73 +85,190 @@ class ListWallet extends StatelessWidget {
       itemCount: controller.wallets.length,
       itemBuilder: (context, index) {
         final wallet = controller.wallets[index];
-        return Container(
-          margin: EdgeInsets.only(bottom: 16),
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: AppColors.neutral.neutralColor600,
-              width: 1,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return Slidable(
+          startActionPane: ActionPane(
+            extentRatio: 0.25,
+            motion: ScrollMotion(),
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    wallet.name,
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.black,
-                      fontWeight: FontWeight.bold,
+              Builder(
+                builder: (cont) {
+                  return Expanded(
+                      child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => CreateWalletView(), arguments: wallet.id);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      backgroundColor: AppColors.secondary,
+                      padding: EdgeInsets.all(10),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    wallet.type,
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.black,
+                    child: Icon(
+                      Icons.edit,
+                      color: AppColors.white,
+                      size: 24,
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Rp. ${wallet.balance}',
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.black,
-                      fontWeight: FontWeight.bold,
+                  ));
+                },
+              )
+            ],
+          ),
+          endActionPane: ActionPane(
+            extentRatio: 0.25,
+            motion: ScrollMotion(),
+            children: [
+              Builder(
+                builder: (cont) {
+                  return Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) => Dialog(
+                            backgroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(8), // Rounded corners
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Title
+                                  Text(
+                                    'Are you sure?',
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        AppTypography.headlineMedium.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  // Description
+                                  Text(
+                                    "Deleting this wallet will remove it and all its transaction history permanently. If you're sure, you can proceed—but remember, this action can't be undone!",
+                                    textAlign: TextAlign.center,
+                                    style: AppTypography.bodyLarge.copyWith(
+                                      height: 1.5,
+                                      color: AppColors.secondary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 24),
+                                  // Buttons
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Button(
+                                          type: ButtonType.tertiary,
+                                          onPressed: () {
+                                            Navigator.of(dialogContext).pop();
+                                          },
+                                          label: 'Not now',
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Button(
+                                          type: ButtonType.danger,
+                                          onPressed: () {
+                                            controller.deleteWallet(wallet.id);
+                                            Navigator.of(dialogContext).pop();
+                                          },
+                                          label: 'Delete',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        backgroundColor: AppColors.error.errorColor500,
+                        padding: EdgeInsets.all(10),
+                      ),
+                      child: Icon(
+                        Icons.delete,
+                        color: AppColors.white,
+                        size: 24,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                width: 72,
-                height: 54,
-                decoration: BoxDecoration(
-                  color: wallet.type == 'cash'
-                      ? AppColors.secondary
-                      : wallet.type == 'bank'
-                          ? AppColors.primary
-                          : AppColors.neutral
-                              .neutralColor700, // Default to neutral for 'ewallet'
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: Image.asset(wallet.type == 'cash'
-                        ? "assets/images/picbudget logo primary.png"
-                        : wallet.type == 'bank'
-                            ? "assets/images/picbudget logo.png"
-                            : "assets/images/picbudget logo white.png"),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
+          ),
+          child: Container(
+            margin: EdgeInsets.only(bottom: 16),
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: AppColors.neutral.neutralColor600,
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      wallet.name,
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      wallet.type,
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.black,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Rp. ${wallet.balance}',
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  width: 72,
+                  height: 54,
+                  decoration: BoxDecoration(
+                    color: wallet.type == 'cash'
+                        ? AppColors.secondary
+                        : wallet.type == 'bank'
+                            ? AppColors.primary
+                            : AppColors.neutral.neutralColor700,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SizedBox(
+                      width: 32,
+                      height: 32,
+                      child: Image.asset(wallet.type == 'cash'
+                          ? "assets/images/picbudget logo primary.png"
+                          : wallet.type == 'bank'
+                              ? "assets/images/picbudget logo.png"
+                              : "assets/images/picbudget logo white.png"),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

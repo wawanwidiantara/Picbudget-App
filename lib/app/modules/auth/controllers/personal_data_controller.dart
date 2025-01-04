@@ -20,10 +20,6 @@ class PersonalDataController extends GetxController {
 
   final AuthService authService = AuthService();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   @override
   void onClose() {

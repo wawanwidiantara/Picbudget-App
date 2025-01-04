@@ -41,15 +41,15 @@ class Plan {
     return Plan(
       id: json['id'],
       name: json['name'],
-      amount: double.tryParse(json['amount'] ?? '0.0'),
-      remaining: json['remaining'] ?? 0.0,
-      progress: json['progress'] ?? 0.0,
+      amount: _toDouble(json['amount']),
+      remaining: _toDouble(json['remaining']),
+      progress: _toDouble(json['progress']),
       isOverspent: json['is_overspent'] ?? false,
       period: json['period'],
       notifyOverspent: json['notify_overspent'] ?? false,
-      dailyAverage: json['daily_average'] ?? 0.0,
-      dailyRecommended: json['daily_recommended'] ?? 0.0,
-      spent: json['spent'] ?? 0.0,
+      dailyAverage: _toDouble(json['daily_average']),
+      dailyRecommended: _toDouble(json['daily_recommended']),
+      spent: _toDouble(json['spent']),
       lastPeriods: json['last_periods'] ?? [],
       spendingByLabels: json['spending_by_labels'] ?? [],
       labels: List<String>.from(json['labels'] ?? []),
@@ -58,5 +58,18 @@ class Plan {
           ? PicPlanChart.fromJson(json['picplan_chart'])
           : null,
     );
+  }
+
+  static double _toDouble(dynamic value) {
+    if (value == null) {
+      return 0.0;
+    }
+    if (value is int) {
+      return value.toDouble();
+    }
+    if (value is double) {
+      return value;
+    }
+    return double.tryParse(value.toString()) ?? 0.0;
   }
 }
